@@ -5,10 +5,10 @@ RUN npm install -g pnpm
 
 WORKDIR /app
 
-COPY . .
-
+COPY package.json pnpm-lock.yaml ./
 RUN pnpm install --frozen-lockfile
 
+COPY . .
 RUN pnpm run build
 
 # Production stage with nginx
@@ -17,11 +17,15 @@ FROM nginx:1.25-alpine
 # Install wget for health check
 RUN apk add --no-cache wget
 
-# Copy nginx configuration
+# Remove default nginx config and copy ours
+RUN rm /etc/nginx/conf.d/default.conf
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-# Copy built admin app
-COPY --from=builder /app/apps/admin/dist /usr/share/nginx/html
+# Copy built app
+COPY --from=builder /app/dist /usr/share/nginx/html
+
+# Make sure nginx has proper permissions
+RUN chmod -R 755 /usr/share/nginx/html
 
 # Health check
 HEALTHCHECK --interval=60s --timeout=10s --retries=3 \
