@@ -1,0 +1,68 @@
+name: Build and Security Checks
+
+on:
+  push:
+    branches: [develop]
+  pull_request:
+    branches: [master]
+
+jobs:
+  build-check:
+    name: 🔨 Build Check
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "pnpm"
+
+      - name: Install pnpm
+        run: npm install -g pnpm
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Type Check
+        run: pnpm tsc --noEmit
+
+      - name: Build Project (Vite)
+        run: pnpm build
+
+  security-check:
+    name: 🔐 Security Check (Snyk)
+    needs: build-check
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Install Snyk CLI
+        run: npm install -g snyk@latest
+
+      - name: Authenticate with Snyk
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        run: snyk auth $SNYK_TOKEN
+
+      - name: 📦 Snyk Dependency Scan (SCA)
+        run: snyk test --severity-threshold=medium
+        continue-on-error: true
+
+      - name: 🧠 Snyk Code Scan (SAST)
+        run: snyk code test --severity-threshold=medium
+        continue-on-error: true
+
+      - name: 📡 Monitor for Future Issues
+        if: github.ref == 'refs/heads/develop'
+        run: snyk monitor
