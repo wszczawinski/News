@@ -19,7 +19,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "22"
-          cache: "pnpm"
 
       - name: Install pnpm
         run: npm install -g pnpm
@@ -49,6 +48,12 @@ jobs:
 
       - name: Install Snyk CLI
         run: npm install -g snyk@latest
+
+      - name: Install pnpm
+        run: npm install -g pnpm
+
+      - name: Install dependencies
+        run: pnpm install
 
       - name: Authenticate with Snyk
         env:
