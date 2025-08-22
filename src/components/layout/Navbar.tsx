@@ -17,7 +17,7 @@ export const Navbar = () => {
           <img width={169} height={29} src={logo} alt="small logo" />
         </Link>
 
-        <nav className="hidden md:flex font-medium flex-row items-center justify-end gap-5 lg:gap-6">
+        <nav className="hidden md:flex font-medium flex-row items-center justify-end gap-5 lg:gap-8">
           <NavContent onClick={() => setOpen(false)} />
         </nav>
 
@@ -35,7 +35,7 @@ export const Navbar = () => {
             </SheetTrigger>
           </div>
           <SheetContent side="left">
-            <nav className="grid gap-6 text-lg font-medium">
+            <nav className="grid gap-6 text-lg font-medium p-6">
               <NavContent onClick={() => setOpen(false)} />
             </nav>
           </SheetContent>

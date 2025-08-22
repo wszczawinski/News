@@ -1,8 +1,6 @@
 import Autoplay from "embla-carousel-autoplay";
 import { Carousel, CarouselContent, CarouselItem } from "./ui/carousel";
 
-
-
 type Poster = { image: string; onClick?: () => void };
 
 type SidebarPosterProps = {

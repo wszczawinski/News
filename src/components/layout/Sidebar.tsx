@@ -25,17 +25,10 @@ export const Sidebar = () => {
         ]}
       />
       <SidebarPoster
-        title={"1% podatku"}
-        posters={[
-          { image: add1, onClick: () => console.log("click") },
-          { image: add4 },
-        ]}
-        delay={5000}
-      />
-      <SidebarPoster
         title={"Polecamy"}
         posters={[
           { image: add1, onClick: () => console.log("click") },
+          { image: add3, onClick: () => console.log("click") },
           { image: add4 },
         ]}
         delay={7000}
