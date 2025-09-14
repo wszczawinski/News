@@ -6,29 +6,24 @@ import { GalleryDialog } from './GalleryDialog';
 import { Button } from './ui/button';
 
 export const SinglePost = ({ post }: { post: Post }) => {
-
-
   return (
-    <div className="space-y-3">
-      <span className="flex flex-row justify-between">
-        <h4 className="text-xl font-semibold tracking-tight sm:text-2xl">
-          {post.title}
-        </h4>
+    <div className='space-y-3'>
+      <span className='flex flex-row justify-between'>
+        <h4 className='text-xl font-semibold tracking-tight sm:text-2xl'>{post.title}</h4>
 
-        <div className="flex justify-center gap-4">
-          <Button variant="default" size="sm">
-            <GalleryDialog media={post.media} title={post.title} />
-          </Button>
+        <div className='flex justify-center gap-4'>
+          {post.media && (
+            <Button variant='default' size='sm'>
+              <GalleryDialog media={post.media} title={post.title} />
+            </Button>
+          )}
           <BackButton />
         </div>
       </span>
 
       <FormattedDate date={post.createdAt} />
 
-      <div
-        className="flex flex-col gap-2 text-sm text-justify"
-        dangerouslySetInnerHTML={{ __html: post.content }}
-      />
+      <div className='flex flex-col gap-2 text-sm text-justify' dangerouslySetInnerHTML={{ __html: post.content }} />
     </div>
   );
 };
