@@ -5,7 +5,6 @@ yarn-debug.log*
 pnpm-debug.log*
 
 # Environment files
-.env*
 !.env.example
 
 # Build output (copied from builder stage)
@@ -44,8 +43,6 @@ coverage/
 # Config files not needed in container
 .prettierrc*
 eslint.config.*
-tsconfig*.json
-vite.config.*
 
 # CI/CD
 .github/
