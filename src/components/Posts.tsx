@@ -1,17 +1,17 @@
-import { CategorySelect } from "@/components/CategorySelect";
-import { HomePagination } from "@/components/HomePagination";
-import type { Paginated, Post } from "@/types";
+import { CategorySelect } from '@/components/CategorySelect';
+import { HomePagination } from '@/components/HomePagination';
+import type { Paginated, Post } from '@/types';
 
-import { NewsList } from "./NewsList";
+import { NewsList } from './NewsList';
 
 export const Posts = ({ paginatedPosts }: { paginatedPosts: Paginated<Post> }) => {
   return (
-    <section className="flex flex-col gap-4 min-h-full">
-      <div className="flex w-full flex-col items-start justify-end rounded-md gap-4 sm:flex-row sm:items-center">
+    <section className='flex flex-col gap-4 min-h-full'>
+      <div className='flex w-full flex-col items-start justify-end rounded-md gap-4 sm:flex-row sm:items-center'>
         {/* <HomeBreadcrumbs /> */}
         <CategorySelect />
       </div>
-      <div className="grow flex flex-col gap-4">
+      <div className='grow flex flex-col gap-4'>
         <NewsList posts={paginatedPosts.content} />
       </div>
       <HomePagination />

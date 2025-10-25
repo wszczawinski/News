@@ -1,7 +1,7 @@
 import type { Post } from '@/types';
+
 import { FormattedDate } from './FormattedDate';
 import { BackButton } from './BackButton';
-
 import { GalleryDialog } from './GalleryDialog';
 import { Button } from './ui/button';
 

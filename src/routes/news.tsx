@@ -1,21 +1,21 @@
-import { z } from "zod";
-import { createFileRoute } from "@tanstack/react-router";
-import { useSuspenseQuery } from "@tanstack/react-query";
+import { z } from 'zod';
+import { createFileRoute } from '@tanstack/react-router';
+import { useSuspenseQuery } from '@tanstack/react-query';
 
-import { postsQueryOptions } from "@/services/queries";
-import { Posts } from "@/components/Posts";
-import { Spinner } from "@/components/ui/spinner";
-import { QUERY_KEYS } from "@/services/api";
+import { postsQueryOptions } from '@/services/queries';
+import { Posts } from '@/components/Posts';
+import { Spinner } from '@/components/ui/spinner';
+import { QUERY_KEYS } from '@/services/api';
 
 const newsSearchSchema = z.object({
   page: z.number().catch(1),
-  category: z.string().catch("all"),
+  category: z.string().catch('all'),
 });
 
 type HomeParams = z.infer<typeof newsSearchSchema>;
 
-export const Route = createFileRoute("/news")({
-  validateSearch: (search) => newsSearchSchema.parse(search),
+export const Route = createFileRoute('/news')({
+  validateSearch: search => newsSearchSchema.parse(search),
   loaderDeps: (search): HomeParams => newsSearchSchema.parse(search),
   loader: async ({ context: { queryClient }, deps: { page, category } }) => {
     const paginatedPosts = await queryClient.ensureQueryData(postsQueryOptions({ page, category }));
@@ -24,18 +24,14 @@ export const Route = createFileRoute("/news")({
       queryClient.setQueryData([QUERY_KEYS.POST, post.id], post);
     }
 
-    return paginatedPosts
+    return paginatedPosts;
   },
   pendingComponent: () => (
-    <div className="h-80 flex flex-col items-center justify-center">
-      <Spinner size={"large"} />
+    <div className='h-80 flex flex-col items-center justify-center'>
+      <Spinner size={'large'} />
     </div>
   ),
-  errorComponent: () => (
-    <div className="h-80 flex flex-col items-center justify-center">
-      Error occured
-    </div>
-  ),
+  errorComponent: () => <div className='h-80 flex flex-col items-center justify-center'>Error occured</div>,
   component: PostsPage,
 });
 

@@ -1,20 +1,21 @@
-import type { PostQueryParams } from "@/types";
-import axios from "axios";
+import axios from 'axios';
+
+import type { PostQueryParams } from '@/types';
 
 const apiUrl = import.meta.env.VITE_API_URL;
 
 export const axiosInstance = axios.create({
-  baseURL: apiUrl
+  baseURL: apiUrl,
 });
 
 export enum ENDPOINTS {
-  POSTS = "posts",
-  POST = 'post'
+  POSTS = 'posts',
+  POST = 'post',
 }
 
 export enum QUERY_KEYS {
   POST = 'post',
-  POSTS = "posts",
+  POSTS = 'posts',
 }
 
 export const fetcher = async <T, K>(url: ENDPOINTS, params: K) => {
@@ -22,8 +23,7 @@ export const fetcher = async <T, K>(url: ENDPOINTS, params: K) => {
   return res.data;
 };
 
-
 export const getPost = async ({ id }: PostQueryParams) => {
   const res = await axiosInstance.get(`${ENDPOINTS.POSTS}/${id}`);
   return res.data;
-}
+};
