@@ -7,3 +7,4 @@ coverage
 public
 index.html
 vite.config.ts
+routeTree.gen.ts
