@@ -65,7 +65,7 @@ export const CategorySelect = () => {
       {category !== 'all' && (
         <Button
           className='animate-fade-in'
-          size={'icon'}
+          size={'sm'}
           variant={'outline'}
           onClick={() =>
             navigate({

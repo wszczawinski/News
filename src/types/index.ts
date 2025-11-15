@@ -1,21 +1,20 @@
 export interface Post {
   id: string;
   title: string;
+  shortDescription: string;
   slug: string;
   content: string;
   createdAt: Date;
   category: Category;
   tag: Tag;
   media: Media;
+  thumbnail: string;
 }
 
 export interface MediaFile {
-  id: number;
-  mediaId: number;
   file: string;
-  shortDescription: string | null;
-  size: number;
-  position: number;
+  thumbnail165: string;
+  thumbnail600: string;
 }
 
 export interface Media {

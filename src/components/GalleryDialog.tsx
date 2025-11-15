@@ -14,14 +14,14 @@ type GalleryProps = {
 const mediaUrl = import.meta.env.VITE_MEDIA_URL;
 
 const buildMediaUrl = ({ folder, filename }: { folder: string; filename: string }): string => {
-  return `${mediaUrl}/${folder}/${filename}`;
+  return `${mediaUrl}/media/${folder}/${filename}`;
 };
 
 export const GalleryDialog = ({ media, title }: GalleryProps) => {
   const images = media.mediaFiles.map(file => ({
-    id: file.id,
+    id: file.file,
     url: buildMediaUrl({ folder: media.folder, filename: file.file }),
-    thumbnailUrl: buildMediaUrl({ folder: media.folder, filename: file.file }),
+    thumbnailUrl: buildMediaUrl({ folder: media.folder + '/thumbnail', filename: file.thumbnail165 }),
   }));
 
   const [open, setOpen] = useState(false);
@@ -100,12 +100,12 @@ export const GalleryDialog = ({ media, title }: GalleryProps) => {
       <DialogTrigger>Gallery</DialogTrigger>
       <DialogContent className='md:max-w-3xl'>
         <DialogHeader>
-          <DialogTitle>{title}</DialogTitle>
+          <DialogTitle className='text-sm line-clamp-1 pr-5'>{title}</DialogTitle>
         </DialogHeader>
 
         {/* Main image container */}
         <div className='w-full'>
-          <div className='hidden sm:flex items-center gap-2 relative'>
+          <div className='hidden md:flex items-center gap-2 relative'>
             <Button variant='outline' size='icon' onClick={goToPrevious} className='flex-shrink-0'>
               <ArrowLeft className='h-4 w-4' />
             </Button>
@@ -128,7 +128,7 @@ export const GalleryDialog = ({ media, title }: GalleryProps) => {
           </div>
 
           {/* Mobile layout - buttons below image */}
-          <div className='sm:hidden'>
+          <div className='md:hidden'>
             <div className='flex justify-center items-center'>
               <img
                 src={images[currentIndex].url}
@@ -137,7 +137,7 @@ export const GalleryDialog = ({ media, title }: GalleryProps) => {
               />
             </div>
 
-            <div className='flex justify-center items-center gap-4 mt-4'>
+            <div className='flex justify-center items-center gap-4 mt-2'>
               <Button variant='outline' size='icon' onClick={goToPreviousMobile}>
                 <ArrowLeft className='h-4 w-4' />
               </Button>
@@ -153,15 +153,15 @@ export const GalleryDialog = ({ media, title }: GalleryProps) => {
           </div>
         </div>
 
-        <ScrollArea ref={scrollAreaRef} className='hidden md:block md:w-[calc(theme(maxWidth.3xl)-theme(spacing.12))] whitespace-nowrap'>
-          <div className='flex w-max space-x-4 pt-4 pb-3'>
+        <ScrollArea ref={scrollAreaRef} className='hidden md:block md:w-[calc(var(--container-3xl)-(--spacing(12)))] whitespace-nowrap'>
+          <div className='flex w-max space-x-4 pt-4 pb-1'>
             {images.map((img, index) => (
               <button
                 key={index}
                 ref={el => {
                   thumbnailRefs.current[index] = el;
                 }}
-                className={`h-20 w-24 rounded border ${index === currentIndex ? 'border-blue-500' : ''}`}
+                className={`h-20 w-24 rounded-sm border-2 ${index === currentIndex ? 'border-2 border-sky-600' : ''}`}
                 onClick={() => handleThumbnailClick(index)}
               >
                 <img src={img.thumbnailUrl} alt={`Thumbnail ${index + 1}`} className='h-full w-full object-cover rounded' />
