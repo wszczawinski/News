@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useState } from 'react';
 
 import logo from '@/images/logo.png';
 import baner1 from '@/images/hero_banner_1.jpg';
@@ -11,14 +11,14 @@ import baner3_small from '@/images/hero_banner_3_small.jpeg';
 import { ProgressiveImage } from '../ProgressiveImage';
 
 export const Hero = () => {
-  const randomBanner = useMemo(() => {
+  const [randomBanner] = useState(() => {
     const banners = [
       { src: baner1, placeholderSrc: baner1_small },
       { src: baner2, placeholderSrc: baner2_small },
       { src: baner3, placeholderSrc: baner3_small },
     ];
     return banners[Math.floor(Math.random() * banners.length)];
-  }, []);
+  });
 
   return (
     <div className='md:px-6 md:bg-gradient-to-t via-[#79BAEF] via-60% from-background to-[#2074AF]'>

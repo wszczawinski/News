@@ -14,10 +14,10 @@ export default defineConfig([
     extends: [
       js.configs.recommended,
       tseslint.configs.recommended,
-      reactHooks.configs['recommended-latest'],
-      reactRefresh.configs.vite,
     ],
     plugins: {
+      'react-hooks': reactHooks,
+      'react-refresh': reactRefresh,
       'unused-imports': unusedImports,
       import: importPlugin,
     },
@@ -26,6 +26,11 @@ export default defineConfig([
       globals: globals.browser,
     },
     rules: {
+      ...reactHooks.configs.recommended.rules,
+      'react-refresh/only-export-components': [
+        'warn',
+        { allowConstantExport: true },
+      ],
       'unused-imports/no-unused-imports': 'error',
       'unused-imports/no-unused-vars': [
         'warn',

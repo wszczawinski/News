@@ -20,23 +20,30 @@ const useDotButton = (emblaApi: EmblaCarouselType | undefined): UseDotButtonType
     [emblaApi]
   );
 
-  const onInit = useCallback((emblaApi: EmblaCarouselType) => {
-    setScrollSnaps(emblaApi.scrollSnapList());
-  }, []);
-
-  const onSelect = useCallback((emblaApi: EmblaCarouselType) => {
-    setSelectedIndex(emblaApi.selectedScrollSnap());
-  }, []);
-
   useEffect(() => {
     if (!emblaApi) return;
 
-    onInit(emblaApi);
-    onSelect(emblaApi);
-    emblaApi.on('reInit', onInit);
-    emblaApi.on('reInit', onSelect);
-    emblaApi.on('select', onSelect);
-  }, [emblaApi, onInit, onSelect]);
+    const handleInit = () => {
+      setScrollSnaps(emblaApi.scrollSnapList());
+    };
+
+    const handleSelect = () => {
+      setSelectedIndex(emblaApi.selectedScrollSnap());
+    };
+
+    handleInit();
+    handleSelect();
+
+    emblaApi.on('reInit', handleInit);
+    emblaApi.on('reInit', handleSelect);
+    emblaApi.on('select', handleSelect);
+
+    return () => {
+      emblaApi.off('reInit', handleInit);
+      emblaApi.off('reInit', handleSelect);
+      emblaApi.off('select', handleSelect);
+    };
+  }, [emblaApi]);
 
   return {
     selectedIndex,
