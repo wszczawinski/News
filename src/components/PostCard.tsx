@@ -21,24 +21,20 @@ export const PostCard = ({ post }: { post: Post }) => {
             src={tumbnailUrl}
           />
         </Link>
-        <CardContent className='flex-1 pt-0.5 pb-1 pl-2 pr-1 md:py-2 md:pt-1 md:pr-2 flex flex-col gap-0 md:gap-0.5 justify-between'>
-          <CardHeader className='p-0'>
+        <CardContent className='flex-1 pt-0.5 pb-1 pl-2 pr-1 md:py-2 md:pt-1 md:pr-2 flex flex-col gap-0 md:gap-0 justify-between'>
+          <CardHeader className='p-0 gap-0.5'>
             <Link to='/post/$postId' params={{ postId: post.id }}>
-              <CardTitle className='font-normal text-md text-sky-600 line-clamp-2'>{post.title}</CardTitle>
+              <CardTitle className='font-normal text-md leading-5 text-sky-600 line-clamp-2'>{post.title}</CardTitle>
             </Link>
 
-            <CardDescription className='hidden sm:line-clamp-2 md:line-clamp-3 lg:line-clamp-4'>{post.shortDescription}</CardDescription>
+            <CardDescription className='hidden sm:line-clamp-2 md:line-clamp-4 lg:line-clamp-4'>{post.shortDescription}</CardDescription>
           </CardHeader>
 
           <CardFooter className='flex justify-between p-0 text-xs text-muted-foreground'>
             <FormattedDate date={post.createdAt} />
 
             <Link to='/post/$postId' params={{ postId: post.id }}>
-              <Button
-                size={'sm'}
-                variant={'outline'}
-                className='h-7 md:h-8 cursor-pointer text-sky-600 hover:opacity-75 hover:text-sky-600'
-              >
+              <Button size={'icon'} variant={'outline'} className='h-7 cursor-pointer text-sky-600 hover:opacity-75 hover:text-sky-600'>
                 <ChevronRight />
               </Button>
             </Link>
