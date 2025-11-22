@@ -3,7 +3,6 @@ import type { Post } from '@/types';
 import { FormattedDate } from './FormattedDate';
 import { GalleryDialog } from './GalleryDialog';
 import { BackButton } from './BackButton';
-import { Button } from './ui/button';
 
 const mediaUrl = import.meta.env.VITE_MEDIA_URL;
 
@@ -19,11 +18,7 @@ export const SinglePost = ({ post }: { post: Post }) => {
 
       <div className='flex justify-between'>
         <FormattedDate date={post.createdAt} />
-        {post.media && (
-          <Button variant='default' size='sm'>
-            <GalleryDialog media={post.media} title={post.title} />
-          </Button>
-        )}
+        {post.media && <GalleryDialog media={post.media} title={post.title} />}
       </div>
       <div>
         <img

@@ -2,10 +2,11 @@ import { ChevronRight } from 'lucide-react';
 import { Link } from '@tanstack/react-router';
 
 import type { Post } from '@/types';
-import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { cn } from '@/lib/utils';
 
 import { FormattedDate } from './FormattedDate';
+import { buttonVariants } from './ui/buttonVariants';
 
 const mediaUrl = import.meta.env.VITE_MEDIA_URL;
 
@@ -33,10 +34,15 @@ export const PostCard = ({ post }: { post: Post }) => {
           <CardFooter className='flex justify-between p-0 text-xs text-muted-foreground'>
             <FormattedDate date={post.createdAt} />
 
-            <Link to='/post/$postId' params={{ postId: post.id }}>
-              <Button size={'icon'} variant={'outline'} className='h-7 cursor-pointer text-sky-600 hover:opacity-75 hover:text-sky-600'>
-                <ChevronRight />
-              </Button>
+            <Link
+              to='/post/$postId'
+              params={{ postId: post.id }}
+              className={cn(
+                buttonVariants({ variant: 'outline', size: 'icon' }),
+                'h-7 cursor-pointer text-sky-600 hover:opacity-75 hover:text-sky-600'
+              )}
+            >
+              <ChevronRight />
             </Link>
           </CardFooter>
         </CardContent>

@@ -3,7 +3,7 @@ import { ArrowLeft, ArrowRight } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import type { Media } from '@/types';
 
 type GalleryProps = {
@@ -97,10 +97,17 @@ export const GalleryDialog = ({ media, title }: GalleryProps) => {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger>Gallery</DialogTrigger>
+      <DialogTrigger asChild>
+        <Button variant='outline' size='sm'>
+          Gallery
+        </Button>
+      </DialogTrigger>
       <DialogContent className='md:max-w-3xl'>
         <DialogHeader>
           <DialogTitle className='text-sm line-clamp-1 pr-5'>{title}</DialogTitle>
+          <DialogDescription className='sr-only'>
+            Image gallery with {images.length} {images.length === 1 ? 'image' : 'images'}
+          </DialogDescription>
         </DialogHeader>
 
         {/* Main image container */}
