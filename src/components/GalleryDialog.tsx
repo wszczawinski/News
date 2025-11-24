@@ -102,7 +102,7 @@ export const GalleryDialog = ({ media, title }: GalleryProps) => {
           Gallery
         </Button>
       </DialogTrigger>
-      <DialogContent className='md:max-w-3xl'>
+      <DialogContent className='md:max-w-4xl'>
         <DialogHeader>
           <DialogTitle className='text-sm line-clamp-1 pr-5'>{title}</DialogTitle>
           <DialogDescription className='sr-only'>
@@ -121,7 +121,7 @@ export const GalleryDialog = ({ media, title }: GalleryProps) => {
               <img
                 src={images[currentIndex].url}
                 alt={`Image ${currentIndex + 1}`}
-                className='max-h-96 max-w-full object-contain rounded'
+                className='max-h-96 max-w-full object-contain rounded md:max-h-[510px]'
               />
             </div>
 
@@ -160,8 +160,8 @@ export const GalleryDialog = ({ media, title }: GalleryProps) => {
           </div>
         </div>
 
-        <ScrollArea ref={scrollAreaRef} className='hidden md:block md:w-[calc(var(--container-3xl)-(--spacing(12)))] whitespace-nowrap'>
-          <div className='flex w-max space-x-4 pt-4 pb-1'>
+        <ScrollArea ref={scrollAreaRef} className='hidden md:block md:w-[calc(var(--container-4xl)-(--spacing(8)))] whitespace-nowrap'>
+          <div className='flex w-max space-x-4 pt-1 pb-2'>
             {images.map((img, index) => (
               <button
                 key={index}

@@ -7,7 +7,7 @@ import { NewsList } from './NewsList';
 export const Posts = ({ paginatedPosts }: { paginatedPosts: Paginated<Post> }) => {
   return (
     <section className='flex flex-col gap-4 min-h-full'>
-      <div className='flex w-full flex-col items-start justify-end rounded-md gap-4 sm:flex-row sm:items-center'>
+      <div className='flex w-full flex-col items-start justify-start rounded-md gap-4 sm:flex-row sm:items-center'>
         {/* <HomeBreadcrumbs /> */}
         <CategorySelect />
       </div>

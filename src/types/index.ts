@@ -5,7 +5,7 @@ export interface Post {
   slug: string;
   content: string;
   createdAt: Date;
-  category: Category;
+  categoryId: number;
   tag: Tag;
   media: Media;
   thumbnail: string;
@@ -29,9 +29,10 @@ export interface Media {
 }
 
 export interface Category {
-  id: string;
+  id: number;
   name: string;
-  postCount: number;
+  slug: string;
+  position: number;
 }
 
 export interface Tag {
@@ -42,7 +43,7 @@ export interface Tag {
 
 export type PostsQueryParams = {
   page: number;
-  category: string;
+  category: number | null;
 };
 
 export type PostQueryParams = {
