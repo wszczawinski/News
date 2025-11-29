@@ -15,7 +15,7 @@ export const CategorySelect = () => {
   const { data: categories } = useSuspenseQuery(categoryQueryOptions());
 
   return (
-    <div className='flex flex-row gap-2 w-full sm:w-auto sm:pr-1 sm:pt-1'>
+    <div className='flex flex-row sm:flex-row-reverse gap-2 w-full sm:w-auto sm:pr-1 sm:pt-1'>
       <Select
         defaultValue={category || 'wszystkie'}
         onValueChange={value =>

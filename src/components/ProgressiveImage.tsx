@@ -14,7 +14,7 @@ export const ProgressiveImage = ({ placeholderSrc, src, className, ...props }: P
     img.onload = () => setImgSrc(src);
   }, [src]);
 
-  const customClass = placeholderSrc && imgSrc === placeholderSrc ? 'scale-105 blur-sm' : 'scale-100 blur-none';
+  const customClass = placeholderSrc && imgSrc === placeholderSrc ? 'scale-101 blur-sm' : 'scale-100 blur-none';
 
   return (
     <div className={`bg-no-repeat bg-cover ${className}`}>
