@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import type { Category, Paginated, Post, PostQueryParams, PostsQueryParams } from '@/types';
+import type { Banner, Category, Paginated, Post, PostQueryParams, PostsQueryParams } from '@/types';
 
 const apiUrl = import.meta.env.VITE_API_URL;
 
@@ -13,12 +13,14 @@ export const axiosInstance = axios.create({
 
 export enum ENDPOINTS {
   POSTS = 'posts',
+  BANNERS = 'banners',
   CATEGORIES = 'categories',
 }
 
 export enum QUERY_KEYS {
   POST = 'post',
   POSTS = 'posts',
+  BANNERS = 'banners',
   CATEGORIES = 'categories',
 }
 
@@ -34,5 +36,10 @@ export const getPost = async ({ id }: PostQueryParams): Promise<Post> => {
 
 export const getCategories = async (): Promise<Category[]> => {
   const res = await axiosInstance.get(ENDPOINTS.CATEGORIES);
+  return res.data;
+};
+
+export const getBanners = async (): Promise<Banner[]> => {
+  const res = await axiosInstance.get(ENDPOINTS.BANNERS);
   return res.data;
 };
