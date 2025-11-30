@@ -70,7 +70,8 @@ export interface Banner {
   name: string;
   link: string;
   image: string;
-  imageThumbnail: string;
+  imageThumbnail20: string;
+  imageThumbnail600: string;
   type: BannerTypeKey;
   width: number;
   height: number;

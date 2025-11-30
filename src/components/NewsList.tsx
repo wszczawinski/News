@@ -23,7 +23,7 @@ export const NewsList = ({ posts }: { posts: Post[] }) => {
             <ProgressiveImage
               className='rounded-sm'
               src={`${mediaUrl}/banner/${banner_post_1.image}`}
-              placeholderSrc={`${mediaUrl}/banner/thumbnail/${banner_post_1.imageThumbnail}`}
+              placeholderSrc={`${mediaUrl}/banner/thumbnail/${banner_post_1.imageThumbnail20}`}
               height={banner_post_1.height}
               width={banner_post_1.width}
               alt={banner_post_1.name}
@@ -33,7 +33,7 @@ export const NewsList = ({ posts }: { posts: Post[] }) => {
             <ProgressiveImage
               className='rounded-sm'
               src={`${mediaUrl}/banner/${banner_post_2.image}`}
-              placeholderSrc={`${mediaUrl}/banner/thumbnail/${banner_post_2.imageThumbnail}`}
+              placeholderSrc={`${mediaUrl}/banner/thumbnail/${banner_post_2.imageThumbnail20}`}
               height={banner_post_2.height}
               width={banner_post_2.width}
               alt={banner_post_2.name}
@@ -43,7 +43,7 @@ export const NewsList = ({ posts }: { posts: Post[] }) => {
             <ProgressiveImage
               className='rounded-sm'
               src={`${mediaUrl}/banner/${banner_post_3.image}`}
-              placeholderSrc={`${mediaUrl}/banner/thumbnail/${banner_post_3.imageThumbnail}`}
+              placeholderSrc={`${mediaUrl}/banner/thumbnail/${banner_post_3.imageThumbnail20}`}
               height={banner_post_3.height}
               width={banner_post_3.width}
               alt={banner_post_3.name}

@@ -19,7 +19,7 @@ export const Hero = () => {
           <ProgressiveImage
             className='w-full md:rounded md:h-[70px] md:w-[380px] lg:h-[90px] lg:w-[480px]'
             src={`${mediaUrl}/banner/${banner.image}`}
-            placeholderSrc={`${mediaUrl}/banner/thumbnail/${banner.imageThumbnail}`}
+            placeholderSrc={`${mediaUrl}/banner/thumbnail/${banner.imageThumbnail20}`}
             height={banner.height}
             width={banner.width}
             alt={banner.name}
