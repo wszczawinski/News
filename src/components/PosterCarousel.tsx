@@ -1,17 +1,20 @@
 import Autoplay from 'embla-carousel-autoplay';
 
-import { Carousel, CarouselContent, CarouselItem } from './ui/carousel';
+import type { Banner } from '@/types';
 
-type Poster = { imageUrl: string; onClick?: () => void };
+import { Carousel, CarouselContent, CarouselItem } from './ui/carousel';
+import { PosterDialog } from './PosterDialog';
 
 type SidebarPosterProps = {
-  posters: Poster[];
+  posters: Banner[];
   title?: string;
   delay?: number;
   hasDots?: boolean;
 };
 
-export const SidebarPoster = ({ posters, title, delay = 3000, hasDots }: SidebarPosterProps) => {
+const mediaUrl = import.meta.env.VITE_MEDIA_URL;
+
+export const PosterCarousel = ({ posters, title, delay = 3000, hasDots }: SidebarPosterProps) => {
   const isDots = hasDots ?? posters.length > 1;
 
   return (
@@ -28,9 +31,11 @@ export const SidebarPoster = ({ posters, title, delay = 3000, hasDots }: Sidebar
         isDots={isDots}
       >
         <CarouselContent>
-          {posters.map(poster => (
-            <CarouselItem key={poster.imageUrl} onClick={poster?.onClick}>
-              <img className='rounded-lg' src={poster.imageUrl} />
+          {posters.map((poster, index) => (
+            <CarouselItem key={poster.id}>
+              <PosterDialog posters={posters} index={index}>
+                <img className='rounded-md' src={`${mediaUrl}/banner/${poster.image}`} />
+              </PosterDialog>
             </CarouselItem>
           ))}
         </CarouselContent>
