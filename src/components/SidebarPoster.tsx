@@ -8,14 +8,15 @@ type SidebarPosterProps = {
   posters: Poster[];
   title?: string;
   delay?: number;
+  hasDots?: boolean;
 };
 
-export const SidebarPoster = ({ posters, title, delay = 3000 }: SidebarPosterProps) => {
-  const isDots = posters.length > 1;
+export const SidebarPoster = ({ posters, title, delay = 3000, hasDots }: SidebarPosterProps) => {
+  const isDots = hasDots ?? posters.length > 1;
 
   return (
     <article className={`w-full`}>
-      <p className='font-medium text-sky-600 pb-1 text-right'>{title}</p>
+      <p className='sm:font-medium text-sky-600 pb-1 text-center sm:text-right'>{title}</p>
       <Carousel
         plugins={[
           Autoplay({

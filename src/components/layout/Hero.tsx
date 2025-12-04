@@ -17,7 +17,7 @@ export const Hero = () => {
         <img className='hidden md:block md:h-40 md:mb-[-28px]' src={logo} alt='logo' />
         {banner && (
           <ProgressiveImage
-            className='w-full md:rounded md:h-[70px] md:w-[380px] lg:h-[90px] lg:w-[480px]'
+            className='w-full md:rounded md:h-[75px] md:w-[375px] lg:h-[100px] lg:w-[500px]'
             src={`${mediaUrl}/banner/${banner.image}`}
             placeholderSrc={`${mediaUrl}/banner/thumbnail/${banner.imageThumbnail20}`}
             height={banner.height}
