@@ -2,7 +2,7 @@ import Autoplay from 'embla-carousel-autoplay';
 
 import { Carousel, CarouselContent, CarouselItem } from './ui/carousel';
 
-type Poster = { image: string; onClick?: () => void };
+type Poster = { imageUrl: string; onClick?: () => void };
 
 type SidebarPosterProps = {
   posters: Poster[];
@@ -11,9 +11,11 @@ type SidebarPosterProps = {
 };
 
 export const SidebarPoster = ({ posters, title, delay = 3000 }: SidebarPosterProps) => {
+  const isDots = posters.length > 1;
+
   return (
-    <article className={`w-full  ${title ? 'h-72' : 'h-64'} `}>
-      <p className='text-l pb-1'>{title}</p>
+    <article className={`w-full`}>
+      <p className='font-medium text-sky-600 pb-1 text-right'>{title}</p>
       <Carousel
         plugins={[
           Autoplay({
@@ -22,12 +24,12 @@ export const SidebarPoster = ({ posters, title, delay = 3000 }: SidebarPosterPro
           }),
         ]}
         opts={{ loop: true }}
-        isDots
+        isDots={isDots}
       >
         <CarouselContent>
           {posters.map(poster => (
-            <CarouselItem key={poster.image} onClick={poster?.onClick}>
-              <img className='rounded-lg' src={poster.image} />
+            <CarouselItem key={poster.imageUrl} onClick={poster?.onClick}>
+              <img className='rounded-lg' src={poster.imageUrl} />
             </CarouselItem>
           ))}
         </CarouselContent>
