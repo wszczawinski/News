@@ -35,7 +35,7 @@ export const Navbar = () => {
           <div className='flex sm:hidden'>
             <SheetTrigger asChild>
               <Button variant='outline' size='sm' className='shrink-0 md:hidden'>
-                <Menu className='h-5 w-5' />
+                <Menu className='h-5 w-5 text-sky-600' />
                 <span className='sr-only'>Toggle navigation menu</span>
               </Button>
             </SheetTrigger>

@@ -28,6 +28,7 @@ export const NewsBanners = ({ postIndex }: { postIndex: number }) => {
           placeholderSrc={`${mediaUrl}/banner/thumbnail/${banner_post_1.imageThumbnail20}`}
           height={banner_post_1.height}
           width={banner_post_1.width}
+          link={banner_post_1.link}
           alt={banner_post_1.name}
         />
       )}

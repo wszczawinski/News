@@ -8,27 +8,33 @@ import { categoryQueryOptions } from '@/services/queries';
 
 export const CategorySelect = () => {
   const navigate = useNavigate();
-
+  const { data: categories } = useSuspenseQuery(categoryQueryOptions());
   const { search } = useRouterState({ select: s => s.location });
+
   const category = search?.category || 'wszystkie';
 
-  const { data: categories } = useSuspenseQuery(categoryQueryOptions());
+  const handleValueChange = (value: string) => {
+    if (value === 'wszystkie') {
+      navigate({
+        to: '/',
+      });
+    } else {
+      navigate({
+        to: '/news',
+        search: { page: 1, category: value },
+      });
+    }
+  };
+
+  const handleClear = () => {
+    navigate({
+      to: '/',
+    });
+  };
 
   return (
     <div className='flex flex-row sm:flex-row-reverse gap-2 w-full sm:w-auto sm:pr-1 sm:pt-1'>
-      <Select
-        defaultValue={category || 'wszystkie'}
-        onValueChange={value =>
-          value === 'wszystkie'
-            ? navigate({
-                to: '/',
-              })
-            : navigate({
-                to: '/news',
-                search: { page: 1, category: value },
-              })
-        }
-      >
+      <Select value={category} onValueChange={handleValueChange}>
         <SelectTrigger className='flex-1 focus:ring-0 focus:ring-offset-0 w-full sm:w-[220px]'>
           <SelectValue placeholder='Wybierz kategorie' />
         </SelectTrigger>
@@ -44,16 +50,7 @@ export const CategorySelect = () => {
         </SelectContent>
       </Select>
       {category !== 'wszystkie' && (
-        <Button
-          className='animate-fade-in'
-          size={'default'}
-          variant={'outline'}
-          onClick={() =>
-            navigate({
-              to: '/',
-            })
-          }
-        >
+        <Button onClick={handleClear} className='animate-fade-in bg-transparent' size={'default'} variant={'outline'}>
           <FilterX size={16} />
         </Button>
       )}

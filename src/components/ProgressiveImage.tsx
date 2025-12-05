@@ -2,6 +2,7 @@ import { useState } from 'react';
 
 interface ProgressiveImageProps {
   src: string;
+  link?: string;
   placeholderSrc: string;
   width: number;
   height: number;
@@ -9,7 +10,7 @@ interface ProgressiveImageProps {
   className?: string;
 }
 
-export const ProgressiveImage = ({ src, placeholderSrc, width, height, alt = '', className = '' }: ProgressiveImageProps) => {
+export const ProgressiveImage = ({ src, link, placeholderSrc, width, height, alt = '', className = '' }: ProgressiveImageProps) => {
   const [loaded, setLoaded] = useState(false);
 
   const containerStyle: React.CSSProperties = {
@@ -24,15 +25,29 @@ export const ProgressiveImage = ({ src, placeholderSrc, width, height, alt = '',
 
   return (
     <div className={`w-full aspect-[var(--ar)] overflow-hidden relative ${className}`} style={containerStyle}>
-      <img
-        src={src}
-        alt={alt}
-        className='w-full h-full object-cover absolute inset-0 opacity-0 transition-opacity duration-500'
-        onLoad={e => {
-          setLoaded(true);
-          e.currentTarget.style.opacity = '1';
-        }}
-      />
+      {link ? (
+        <a href={link} target='_blank'>
+          <img
+            src={src}
+            alt={alt}
+            className='w-full h-full object-cover absolute inset-0 opacity-0 transition-opacity duration-500'
+            onLoad={e => {
+              setLoaded(true);
+              e.currentTarget.style.opacity = '1';
+            }}
+          />
+        </a>
+      ) : (
+        <img
+          src={src}
+          alt={alt}
+          className='w-full h-full object-cover absolute inset-0 opacity-0 transition-opacity duration-500'
+          onLoad={e => {
+            setLoaded(true);
+            e.currentTarget.style.opacity = '1';
+          }}
+        />
+      )}
     </div>
   );
 };
