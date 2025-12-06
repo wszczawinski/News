@@ -1,4 +1,3 @@
-import { z } from 'zod';
 import { createFileRoute } from '@tanstack/react-router';
 import { useSuspenseQuery } from '@tanstack/react-query';
 
@@ -7,12 +6,24 @@ import { NewsList } from '@/components/NewsList';
 import { Spinner } from '@/components/ui/spinner';
 import { QUERY_KEYS } from '@/services/api';
 
-const newsSearchSchema = z.object({
-  page: z.number().catch(1),
-  category: z.string().catch('wszystkie'),
-});
+type HomeParams = {
+  page: number;
+  category: string;
+};
 
-type HomeParams = z.infer<typeof newsSearchSchema>;
+const validateSearch = (search: unknown): HomeParams => {
+  if (typeof search !== 'object' || search === null) {
+    return { page: 1, category: 'wszystkie' };
+  }
+
+  const searchObj = search as Record<string, unknown>;
+
+  const page = typeof searchObj.page === 'number' && searchObj.page > 0 ? searchObj.page : 1;
+
+  const category = typeof searchObj.category === 'string' ? searchObj.category : 'wszystkie';
+
+  return { page, category };
+};
 
 const PostsPage = () => {
   const { page, category } = Route.useSearch();
@@ -27,8 +38,8 @@ const PostsPage = () => {
 };
 
 export const Route = createFileRoute('/news')({
-  validateSearch: search => newsSearchSchema.parse(search),
-  loaderDeps: (search): HomeParams => newsSearchSchema.parse(search),
+  validateSearch: search => validateSearch(search),
+  loaderDeps: (search): HomeParams => validateSearch(search),
   loader: async ({ context: { queryClient }, deps: { page, category } }) => {
     const categories = await queryClient.ensureQueryData(categoryQueryOptions());
     const categoryId = categories.find(c => c.slug === category)?.id || null;
