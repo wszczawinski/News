@@ -18,8 +18,6 @@ const buildMediaUrl = ({ filename }: { filename: string }): string => {
 };
 
 export const PosterDialog = ({ index, posters, children }: GalleryProps) => {
-  console.log(index);
-
   const images = posters.map(file => ({
     id: file.id,
     url: buildMediaUrl({ filename: file.image }),

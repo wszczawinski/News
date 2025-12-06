@@ -31,6 +31,7 @@ export default defineConfig([
         'warn',
         { allowConstantExport: true },
       ],
+      'no-console': 'error',
       'unused-imports/no-unused-imports': 'error',
       'unused-imports/no-unused-vars': [
         'warn',
