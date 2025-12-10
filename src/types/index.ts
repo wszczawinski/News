@@ -1,5 +1,5 @@
 export interface Post {
-  id: string;
+  id: number;
   title: string;
   shortDescription: string;
   slug: string;
@@ -40,7 +40,7 @@ export type PostsQueryParams = {
 };
 
 export type PostQueryParams = {
-  id: string;
+  id: number;
 };
 
 export interface Paginated<T> {

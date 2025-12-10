@@ -4,20 +4,31 @@ import { useSuspenseQuery } from '@tanstack/react-query';
 import { postQueryOptions } from '@/services/queries';
 import { SinglePost } from '@/components/SinglePost';
 
+const PostComponent = () => {
+  const { postId } = Route.useParams();
+  const { data: post } = useSuspenseQuery(postQueryOptions({ id: postId }));
+
+  return <SinglePost post={post} />;
+};
+
 const PostErrorComponent = () => {
   const router = useRouter();
 
   router.navigate({ to: '/' });
 };
 
-const PostComponent = () => {
-  const postId = Route.useParams().postId;
-  const { data: post } = useSuspenseQuery(postQueryOptions({ id: postId }));
+export const Route = createFileRoute('/post/$postId/$slug')({
+  params: {
+    parse: ({ postId, slug }) => {
+      const numberPostId = Number(postId);
 
-  return <SinglePost post={post} />;
-};
+      if (isNaN(numberPostId) || numberPostId <= 0) {
+        throw new Error('Invalid post Id');
+      }
 
-export const Route = createFileRoute('/post/$postId')({
+      return { postId: numberPostId, slug };
+    },
+  },
   loader: ({ context: { queryClient }, params: { postId } }) => {
     return queryClient.ensureQueryData(postQueryOptions({ id: postId }));
   },
