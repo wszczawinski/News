@@ -4,6 +4,7 @@ import { bannersQueryOptions } from '@/services/queries';
 
 import { PosterCarousel } from '../PosterCarousel';
 import { PosterAdd } from '../PosterAdd';
+import { SidebarLinks } from '../SidebarLinks';
 
 const mediaUrl = import.meta.env.VITE_MEDIA_URL;
 
@@ -19,6 +20,7 @@ export const Sidebar = () => {
       {banner_ad && <PosterAdd imageUrl={`${mediaUrl}/banner/${banner_ad.image}`} name={banner_ad.name} link={banner_ad.link} />}
       {!!banner_recomends.length && <PosterCarousel title='Zapraszamy' posters={banner_recomends} delay={10000} />}
       {!!banner_local.length && <PosterCarousel title='Gmina' posters={banner_local} delay={7000} />}
+      <SidebarLinks />
     </aside>
   );
 };
