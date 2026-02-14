@@ -1,29 +1,53 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
-interface ProgressiveImageProps extends React.DetailedHTMLProps<React.ImgHTMLAttributes<HTMLImageElement>, HTMLImageElement> {
-  placeholderSrc: string;
+interface ProgressiveImageProps {
   src: string;
+  link?: string;
+  placeholderSrc: string;
+  width: number;
+  height: number;
+  alt?: string;
+  className?: string;
 }
 
-export const ProgressiveImage = ({ placeholderSrc, src, className, ...props }: ProgressiveImageProps) => {
-  const [imgSrc, setImgSrc] = useState(placeholderSrc || src);
+export const ProgressiveImage = ({ src, link, placeholderSrc, width, height, alt = '', className = '' }: ProgressiveImageProps) => {
+  const [loaded, setLoaded] = useState(false);
 
-  useEffect(() => {
-    const img = new Image();
-    img.src = src;
-    img.onload = () => setImgSrc(src);
-  }, [src]);
-
-  const customClass = placeholderSrc && imgSrc === placeholderSrc ? 'scale-105 blur-sm' : 'scale-100 blur-none';
+  const containerStyle: React.CSSProperties = {
+    ['--ar' as string]: width / height,
+    maxWidth: `${width}px`,
+    backgroundImage: `url(${placeholderSrc})`,
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+    filter: loaded ? 'blur(0px)' : 'blur(2px)',
+    transition: 'filter 0.5s ease',
+  };
 
   return (
-    <div className={`bg-no-repeat bg-cover ${className}`}>
-      <img
-        {...{ src: imgSrc, ...props }}
-        alt={props.alt || ''}
-        className={`duration-700 ease-in-out ${className} ${customClass}`}
-        loading='lazy'
-      />
+    <div className={`w-full aspect-[var(--ar)] overflow-hidden relative ${className}`} style={containerStyle}>
+      {link ? (
+        <a href={link} target='_blank'>
+          <img
+            src={src}
+            alt={alt}
+            className='w-full h-full object-cover absolute inset-0 opacity-0 transition-opacity duration-500'
+            onLoad={e => {
+              setLoaded(true);
+              e.currentTarget.style.opacity = '1';
+            }}
+          />
+        </a>
+      ) : (
+        <img
+          src={src}
+          alt={alt}
+          className='w-full h-full object-cover absolute inset-0 opacity-0 transition-opacity duration-500'
+          onLoad={e => {
+            setLoaded(true);
+            e.currentTarget.style.opacity = '1';
+          }}
+        />
+      )}
     </div>
   );
 };

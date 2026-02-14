@@ -1,22 +1,39 @@
 import { keepPreviousData, queryOptions } from '@tanstack/react-query';
 
-import type { Post, PostQueryParams, PostsQueryParams, Paginated } from '@/types';
+import type { PostQueryParams, PostsQueryParams } from '@/types';
 
-import { ENDPOINTS, fetcher, getPost } from './api';
+import { getBanners, getCategories, getPost, getPosts, QUERY_KEYS } from './api';
 
 export const postsQueryOptions = (params: PostsQueryParams) => {
   return queryOptions({
-    queryKey: [ENDPOINTS.POSTS, params],
-    queryFn: () => fetcher<Paginated<Post>, PostsQueryParams>(ENDPOINTS.POSTS, params),
+    queryKey: [QUERY_KEYS.POSTS, params],
+    queryFn: () => getPosts(params),
     placeholderData: keepPreviousData,
   });
 };
 
 export const postQueryOptions = (params: PostQueryParams) => {
   return queryOptions({
-    queryKey: [ENDPOINTS.POST, params.id],
+    queryKey: [QUERY_KEYS.POST, params.id],
     queryFn: () => getPost({ id: params.id }),
     placeholderData: keepPreviousData,
     retry: false,
+  });
+};
+
+export const categoryQueryOptions = () => {
+  return queryOptions({
+    queryKey: [QUERY_KEYS.CATEGORIES],
+    queryFn: getCategories,
+    placeholderData: keepPreviousData,
+    staleTime: 24 * 60 * 60 * 1000,
+  });
+};
+
+export const bannersQueryOptions = () => {
+  return queryOptions({
+    queryKey: [QUERY_KEYS.BANNERS],
+    queryFn: getBanners,
+    placeholderData: keepPreviousData,
   });
 };

@@ -14,7 +14,7 @@ export const HomePagination = () => {
   const { search } = useRouterState({ select: s => s.location });
 
   const page = search?.page || 1;
-  const category = search?.category || 'all';
+  const category = search?.category || 'wszystkie';
 
   return (
     <Pagination>

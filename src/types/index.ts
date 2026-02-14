@@ -1,12 +1,11 @@
 export interface Post {
-  id: string;
+  id: number;
   title: string;
   shortDescription: string;
   slug: string;
   content: string;
   createdAt: Date;
-  category: Category;
-  tag: Tag;
+  categoryId: number;
   media: Media;
   thumbnail: string;
 }
@@ -29,24 +28,19 @@ export interface Media {
 }
 
 export interface Category {
-  id: string;
+  id: number;
   name: string;
-  postCount: number;
-}
-
-export interface Tag {
-  id: string;
-  name: string;
-  postCount: number;
+  slug: string;
+  position: number;
 }
 
 export type PostsQueryParams = {
   page: number;
-  category: string;
+  category: number | null;
 };
 
 export type PostQueryParams = {
-  id: string;
+  id: number;
 };
 
 export interface Paginated<T> {
@@ -57,4 +51,31 @@ export interface Paginated<T> {
   number: number;
   numberOfElements: number;
   empty: boolean;
+}
+
+export const BannerType = {
+  1: 'Hero',
+  2: 'Post_1',
+  3: 'Post_2',
+  4: 'Post_3',
+  5: 'Local',
+  6: 'Ads',
+  7: 'Recomends',
+} as const;
+
+export type BannerTypeKey = keyof typeof BannerType;
+
+export interface Banner {
+  id: number;
+  name: string;
+  link: string;
+  image: string;
+  imageThumbnail20: string;
+  imageThumbnail600: string;
+  type: BannerTypeKey;
+  width: number;
+  height: number;
+  active: boolean;
+  createdAt: Date;
+  updatedAt: Date;
 }

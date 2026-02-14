@@ -1,61 +1,39 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, type ReactNode } from 'react';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
-import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import type { Media } from '@/types';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTrigger } from '@/components/ui/dialog';
+import type { Banner } from '@/types';
 
 type GalleryProps = {
-  title: string;
-  media: Media;
+  index: number;
+  posters: Banner[];
+  children: ReactNode;
 };
 
 const mediaUrl = import.meta.env.VITE_MEDIA_URL;
 
-const buildMediaUrl = ({ folder, filename }: { folder: string; filename: string }): string => {
-  return `${mediaUrl}/media/${folder}/${filename}`;
+const buildMediaUrl = ({ filename }: { filename: string }): string => {
+  return `${mediaUrl}/banner/${filename}`;
 };
 
-export const GalleryDialog = ({ media, title }: GalleryProps) => {
-  const images = media.mediaFiles.map(file => ({
-    id: file.file,
-    url: buildMediaUrl({ folder: media.folder, filename: file.file }),
-    thumbnailUrl: buildMediaUrl({ folder: media.folder + '/thumbnail', filename: file.thumbnail165 }),
+export const PosterDialog = ({ index, posters, children }: GalleryProps) => {
+  const images = posters.map(file => ({
+    id: file.id,
+    url: buildMediaUrl({ filename: file.image }),
   }));
 
   const [open, setOpen] = useState(false);
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const scrollAreaRef = useRef<HTMLDivElement>(null);
-  const thumbnailRefs = useRef<(HTMLButtonElement | null)[]>([]);
-
-  const scrollThumbnailIntoView = (index: number) => {
-    const thumbnailElement = thumbnailRefs.current[index];
-    const scrollContainer = scrollAreaRef.current?.querySelector('[data-radix-scroll-area-viewport]');
-
-    if (thumbnailElement && scrollContainer) {
-      const containerRect = scrollContainer.getBoundingClientRect();
-      const thumbnailRect = thumbnailElement.getBoundingClientRect();
-
-      const scrollLeft = thumbnailElement.offsetLeft - containerRect.width / 2 + thumbnailRect.width / 2;
-
-      scrollContainer.scrollTo({
-        left: Math.max(0, scrollLeft),
-        behavior: 'smooth',
-      });
-    }
-  };
+  const [currentIndex, setCurrentIndex] = useState(index);
 
   const goToPrevious = () => {
     const newIndex = currentIndex > 0 ? currentIndex - 1 : images.length - 1;
     setCurrentIndex(newIndex);
-    scrollThumbnailIntoView(newIndex);
   };
 
   const goToNext = () => {
     const newIndex = currentIndex < images.length - 1 ? currentIndex + 1 : 0;
     setCurrentIndex(newIndex);
-    scrollThumbnailIntoView(newIndex);
   };
 
   const goToPreviousMobile = () => {
@@ -65,16 +43,6 @@ export const GalleryDialog = ({ media, title }: GalleryProps) => {
   const goToNextMobile = () => {
     setCurrentIndex(prev => (prev < images.length - 1 ? prev + 1 : 0));
   };
-
-  const handleThumbnailClick = (index: number) => {
-    setCurrentIndex(index);
-  };
-
-  useEffect(() => {
-    if (open) {
-      setCurrentIndex(0);
-    }
-  }, [open]);
 
   useEffect(() => {
     if (!open) return;
@@ -97,17 +65,12 @@ export const GalleryDialog = ({ media, title }: GalleryProps) => {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <Button variant='outline' size='sm'>
-          Gallery
-        </Button>
+      <DialogTrigger className='w-full' asChild>
+        {children}
       </DialogTrigger>
-      <DialogContent className='md:max-w-4xl'>
+      <DialogContent>
         <DialogHeader>
-          <DialogTitle className='text-sm line-clamp-1 pr-5'>{title}</DialogTitle>
-          <DialogDescription className='sr-only'>
-            Image gallery with {images.length} {images.length === 1 ? 'image' : 'images'}
-          </DialogDescription>
+          <DialogDescription className='sr-only'>Posters</DialogDescription>
         </DialogHeader>
 
         {/* Main image container */}
@@ -129,7 +92,7 @@ export const GalleryDialog = ({ media, title }: GalleryProps) => {
               <ArrowRight className='h-4 w-4' />
             </Button>
 
-            <div className='absolute top-0 right-0 bg-black/60 text-white px-3 py-2 rounded text-sm'>
+            <div className='absolute top-0 left-0 bg-black/60 text-white px-3 py-2 rounded text-sm'>
               {currentIndex + 1} / {images.length}
             </div>
           </div>
@@ -159,24 +122,6 @@ export const GalleryDialog = ({ media, title }: GalleryProps) => {
             </div>
           </div>
         </div>
-
-        <ScrollArea ref={scrollAreaRef} className='hidden md:block md:w-[calc(var(--container-4xl)-(--spacing(8)))] whitespace-nowrap'>
-          <div className='flex w-max space-x-4 pt-1 pb-2'>
-            {images.map((img, index) => (
-              <button
-                key={index}
-                ref={el => {
-                  thumbnailRefs.current[index] = el;
-                }}
-                className={`h-20 w-24 rounded-sm border-2 ${index === currentIndex ? 'border-2 border-sky-600' : ''}`}
-                onClick={() => handleThumbnailClick(index)}
-              >
-                <img src={img.thumbnailUrl} alt={`Thumbnail ${index + 1}`} className='h-full w-full object-cover rounded' />
-              </button>
-            ))}
-          </div>
-          <ScrollBar orientation='horizontal' />
-        </ScrollArea>
       </DialogContent>
     </Dialog>
   );
