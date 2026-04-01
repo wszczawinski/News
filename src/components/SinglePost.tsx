@@ -23,7 +23,7 @@ export const SinglePost = ({ post }: { post: Post }) => {
         </div>
         <div>
           <img
-            className='float-left aspect-22/14 hidden sm:block sm:max-w-[180px] md:max-w-[220px] max-h-[134px] object-cover rounded-xs mr-3 mb-2'
+            className='float-left aspect-22/14 hidden sm:block sm:w-[180px] md:w-[220px] max-h-[134px] object-cover rounded-xs mr-3 mb-2'
             src={tumbnailUrl}
           />
 

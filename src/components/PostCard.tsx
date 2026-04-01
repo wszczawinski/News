@@ -14,13 +14,10 @@ export const PostCard = ({ post }: { post: Post }) => {
   const tumbnailUrl = mediaUrl + '/post/thumbnail/' + post.thumbnail;
 
   return (
-    <Card key={post.id} className='rounded-sm max-h-[162px]'>
+    <Card key={post.id} className='rounded-sm'>
       <div className='flex flex-row'>
         <Link to='/post/$postId/$slug' params={{ postId: post.id, slug: post.slug }}>
-          <img
-            className='aspect-22/16 max-w-[124px] sm:max-w-[180px] md:max-w-[220px] lg:max-w-[220px] max-h-[160px] object-cover rounded-l-sm'
-            src={tumbnailUrl}
-          />
+          <img className='aspect-22/16 w-[124px] sm:w-[180px] md:w-[220px] object-cover rounded-l-sm' src={tumbnailUrl} />
         </Link>
         <CardContent className='flex-1 pt-0.5 pb-1 pl-2 pr-1 md:py-2 md:pt-1 md:pr-2 flex flex-col gap-0 md:gap-0 justify-between'>
           <CardHeader className='p-0 gap-0.5'>

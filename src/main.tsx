@@ -31,6 +31,7 @@ const router = createRouter({
   },
   defaultPreloadStaleTime: 0,
   scrollRestoration: true,
+  defaultViewTransition: true,
 });
 
 // Register the router instance for type safety
