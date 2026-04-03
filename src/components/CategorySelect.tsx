@@ -5,16 +5,19 @@ import { useSuspenseQuery } from '@tanstack/react-query';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { categoryQueryOptions } from '@/services/queries';
+import type { Category } from '@/types';
 
 export const CategorySelect = () => {
   const navigate = useNavigate();
   const { data: categories } = useSuspenseQuery(categoryQueryOptions());
   const { search } = useRouterState({ select: s => s.location });
 
-  const category = search?.category || 'wszystkie';
+  const category = search?.category || 'all';
+
+  const selectCategories: Category[] = [{ id: 0, name: 'Wszystkie aktualności', slug: 'all', position: 0 }, ...categories];
 
   const handleValueChange = (value: string) => {
-    if (value === 'wszystkie') {
+    if (value === 'all') {
       navigate({
         to: '/',
       });
@@ -39,17 +42,14 @@ export const CategorySelect = () => {
           <SelectValue placeholder='Wybierz kategorie' />
         </SelectTrigger>
         <SelectContent>
-          <SelectItem key={'wszystkie'} value={'wszystkie'}>
-            Wszystkie aktualności
-          </SelectItem>
-          {categories?.map(category => (
+          {selectCategories?.map(category => (
             <SelectItem key={category.slug} value={category.slug}>
               {category.name}
             </SelectItem>
           ))}
         </SelectContent>
       </Select>
-      {category !== 'wszystkie' && (
+      {category !== 'all' && (
         <Button onClick={handleClear} className='animate-fade-in bg-transparent' size={'default'} variant={'outline'}>
           <FilterX size={16} />
         </Button>

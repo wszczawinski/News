@@ -5,7 +5,7 @@ import type { Paginated, Post } from '@/types';
 
 import { CategorySelect } from './CategorySelect';
 import { PostCard } from './PostCard';
-import { NewsBanners } from './NewsBanners';
+import { NewsListBanner } from './NewsListBanner.tsx';
 
 export const NewsList = ({ paginatedPosts }: { paginatedPosts: Paginated<Post> }) => {
   return (
@@ -19,7 +19,7 @@ export const NewsList = ({ paginatedPosts }: { paginatedPosts: Paginated<Post> }
           <React.Fragment key={post.id}>
             <PostCard post={post} />
 
-            <NewsBanners postIndex={index} />
+            <NewsListBanner postIndex={index} />
           </React.Fragment>
         ))}
       </div>
