@@ -13,7 +13,7 @@ const mediaUrl = import.meta.env.VITE_MEDIA_URL;
 type BannerPostersProps = { ad?: Banner; recommends: Banner[]; local: Banner[] };
 
 const BannerPosters = ({ ad, recommends, local }: BannerPostersProps) => (
-  <div className='flex flex-row gap-3'>
+  <div className='flex flex-row gap-3 md:hidden'>
     {ad && <PosterAdd imageUrl={`${mediaUrl}/banner/${ad.image}`} name={ad.name} link={ad.link} />}
     {!!recommends.length && <PosterCarousel title='Zapraszamy' posters={recommends} delay={8000} hasDots={false} />}
     {!!local.length && <PosterCarousel title='Gmina' posters={local} delay={7000} hasDots={false} />}

@@ -3,6 +3,7 @@ import { ArrowLeft, ArrowRight } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
+import { useScreenSize } from '@/hooks/useScreenSize';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import type { Media } from '@/types';
 
@@ -24,6 +25,7 @@ export const GalleryDialog = ({ media, title }: GalleryProps) => {
     thumbnailUrl: buildMediaUrl({ folder: media.folder + '/thumbnail', filename: file.thumbnail165 }),
   }));
 
+  const { isDesktop } = useScreenSize();
   const [open, setOpen] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
@@ -160,23 +162,25 @@ export const GalleryDialog = ({ media, title }: GalleryProps) => {
           </div>
         </div>
 
-        <ScrollArea ref={scrollAreaRef} className='hidden md:block md:w-[calc(var(--container-4xl)-(--spacing(8)))] whitespace-nowrap'>
-          <div className='flex w-max space-x-4 pt-1 pb-2'>
-            {images.map((img, index) => (
-              <button
-                key={index}
-                ref={el => {
-                  thumbnailRefs.current[index] = el;
-                }}
-                className={`h-20 w-24 rounded-sm border-2 ${index === currentIndex ? 'border-2 border-sky-600' : ''}`}
-                onClick={() => handleThumbnailClick(index)}
-              >
-                <img src={img.thumbnailUrl} alt={`Thumbnail ${index + 1}`} className='h-full w-full object-cover rounded' />
-              </button>
-            ))}
-          </div>
-          <ScrollBar orientation='horizontal' />
-        </ScrollArea>
+        {isDesktop && (
+          <ScrollArea ref={scrollAreaRef} className='w-[calc(var(--container-4xl)-(--spacing(8)))] whitespace-nowrap'>
+            <div className='flex w-max space-x-4 pt-1 pb-2'>
+              {images.map((img, index) => (
+                <button
+                  key={index}
+                  ref={el => {
+                    thumbnailRefs.current[index] = el;
+                  }}
+                  className={`h-20 w-24 rounded-sm border-2 ${index === currentIndex ? 'border-2 border-sky-600' : ''}`}
+                  onClick={() => handleThumbnailClick(index)}
+                >
+                  <img src={img.thumbnailUrl} alt={`Thumbnail ${index + 1}`} className='h-full w-full object-cover rounded' />
+                </button>
+              ))}
+            </div>
+            <ScrollBar orientation='horizontal' />
+          </ScrollArea>
+        )}
       </DialogContent>
     </Dialog>
   );

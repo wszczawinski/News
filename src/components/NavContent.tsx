@@ -2,14 +2,9 @@ import { Link } from '@tanstack/react-router';
 
 import youtubeSvg from '@/images/youtube.svg';
 
-import { CategorySelect } from './CategorySelect';
-
 export const NavContent = ({ onClick }: { onClick?: () => void }) => {
   return (
     <>
-      <div className='hidden sm:block'>
-        <CategorySelect />
-      </div>
       <Link
         to='/'
         onClick={onClick}
