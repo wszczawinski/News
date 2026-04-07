@@ -1,19 +1,17 @@
-import { Link } from '@tanstack/react-router';
-
 import youtubeSvg from '@/images/youtube.svg';
 
 export const NavContent = ({ onClick }: { onClick?: () => void }) => {
   return (
     <>
-      <Link
-        to='/'
-        onClick={onClick}
-        activeOptions={{ includeSearch: true }}
-        className='text-muted-foreground transition-colors hover:text-foreground'
-        activeProps={{ className: 'text-sky-600 hover:text-sky-600' }}
-      >
-        Główna
-      </Link>
+      {/*<Link*/}
+      {/*  to='/'*/}
+      {/*  onClick={onClick}*/}
+      {/*  activeOptions={{ includeSearch: true }}*/}
+      {/*  className='text-muted-foreground transition-colors hover:text-foreground'*/}
+      {/*  activeProps={{ className: 'text-sky-600 hover:text-sky-600' }}*/}
+      {/*>*/}
+      {/*  Główna*/}
+      {/*</Link>*/}
       <a
         href={'https://www.youtube.com'}
         className='flex gap-2 items-center text-muted-foreground transition-colors hover:text-foreground'
