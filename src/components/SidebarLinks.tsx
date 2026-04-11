@@ -1,12 +1,14 @@
 import dziekanat from '@/images/links/dziekanat.jpg';
 import sanktuarium from '@/images/links/sanktuarium.jpg';
 import gmina from '@/images/links/gmina.jpg';
+import makszynski from '@/images/links/makszynski.jpg';
 
 export const SidebarLinks = () => {
   const links = [
     { link: 'http://lipy.e-lubawa.pl/', src: sanktuarium, alt: 'Sanktuarium' },
     { link: 'http://gminalubawa.pl/', src: gmina, alt: 'Gmina' },
     { link: 'http://www.dekanat.gminalubawa.pl/', src: dziekanat, alt: 'Dziekanat' },
+    { link: 'https://www.facebook.com/makszynski', src: makszynski, alt: 'Makszynski' },
   ];
 
   return (

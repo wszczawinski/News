@@ -25,7 +25,7 @@ export const SinglePost = ({ post }: { post: Post }) => {
 
   return (
     <>
-      <div className='space-y-3 sm:bg-card sm:shadow-sm sm:rounded-sm sm:border sm:p-4'>
+      <div className='space-y-3 sm:bg-card sm:shadow-sm sm:rounded-sm sm:border sm:p-4 sm:min-h-64'>
         <span className='flex flex-row justify-between'>
           <h4 className='text-lg text-sky-600 font-semibold tracking-tight sm:text-xl'>{post.title}</h4>
         </span>
@@ -68,7 +68,7 @@ export const SinglePost = ({ post }: { post: Post }) => {
                     <img
                       src={buildMediaUrl({ folder: post.media.folder + '/thumbnail', filename: image.thumbnail165 })}
                       alt={`Thumbnail ${index + 1}`}
-                      className='w-[46%] max-w-[165px] object-cover rounded cursor-pointer'
+                      className='w-[46%] max-w-[165px] object-cover rounded-xs cursor-pointer'
                     />
                   </GalleryDialog>
                 ))}
