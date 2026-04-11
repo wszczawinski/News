@@ -1,14 +1,17 @@
-import { useState, useEffect, useRef } from 'react';
-import { ArrowLeft, ArrowRight } from 'lucide-react';
+import { useState, useEffect, useRef, type ReactNode } from 'react';
+import { ArrowLeft, ArrowRight, GalleryThumbnails } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
+import { useScreenSize } from '@/hooks/useScreenSize';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import type { Media } from '@/types';
 
 type GalleryProps = {
   title: string;
   media: Media;
+  startIndex?: number;
+  children?: ReactNode;
 };
 
 const mediaUrl = import.meta.env.VITE_MEDIA_URL;
@@ -17,15 +20,16 @@ const buildMediaUrl = ({ folder, filename }: { folder: string; filename: string 
   return `${mediaUrl}/media/${folder}/${filename}`;
 };
 
-export const GalleryDialog = ({ media, title }: GalleryProps) => {
+export const GalleryDialog = ({ media, title, startIndex, children }: GalleryProps) => {
   const images = media.mediaFiles.map(file => ({
     id: file.file,
     url: buildMediaUrl({ folder: media.folder, filename: file.file }),
     thumbnailUrl: buildMediaUrl({ folder: media.folder + '/thumbnail', filename: file.thumbnail165 }),
   }));
 
+  const { isDesktop } = useScreenSize();
   const [open, setOpen] = useState(false);
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const [currentIndex, setCurrentIndex] = useState(startIndex ?? 0);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const thumbnailRefs = useRef<(HTMLButtonElement | null)[]>([]);
 
@@ -72,7 +76,8 @@ export const GalleryDialog = ({ media, title }: GalleryProps) => {
 
   useEffect(() => {
     if (open) {
-      setCurrentIndex(0);
+      setCurrentIndex(startIndex ?? 0);
+      scrollThumbnailIntoView(startIndex ?? 0);
     }
   }, [open]);
 
@@ -98,9 +103,13 @@ export const GalleryDialog = ({ media, title }: GalleryProps) => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant='outline' size='sm'>
-          Gallery
-        </Button>
+        {children ? (
+          children
+        ) : (
+          <Button variant='outline' size='sm' className='cursor-pointer'>
+            <GalleryThumbnails />
+          </Button>
+        )}
       </DialogTrigger>
       <DialogContent className='md:max-w-4xl'>
         <DialogHeader>
@@ -160,23 +169,25 @@ export const GalleryDialog = ({ media, title }: GalleryProps) => {
           </div>
         </div>
 
-        <ScrollArea ref={scrollAreaRef} className='hidden md:block md:w-[calc(var(--container-4xl)-(--spacing(8)))] whitespace-nowrap'>
-          <div className='flex w-max space-x-4 pt-1 pb-2'>
-            {images.map((img, index) => (
-              <button
-                key={index}
-                ref={el => {
-                  thumbnailRefs.current[index] = el;
-                }}
-                className={`h-20 w-24 rounded-sm border-2 ${index === currentIndex ? 'border-2 border-sky-600' : ''}`}
-                onClick={() => handleThumbnailClick(index)}
-              >
-                <img src={img.thumbnailUrl} alt={`Thumbnail ${index + 1}`} className='h-full w-full object-cover rounded' />
-              </button>
-            ))}
-          </div>
-          <ScrollBar orientation='horizontal' />
-        </ScrollArea>
+        {isDesktop && (
+          <ScrollArea ref={scrollAreaRef} className='w-[calc(var(--container-4xl)-(--spacing(8)))] whitespace-nowrap'>
+            <div className='flex w-max space-x-4 pt-1 pb-2'>
+              {images.map((img, index) => (
+                <button
+                  key={index}
+                  ref={el => {
+                    thumbnailRefs.current[index] = el;
+                  }}
+                  className={`h-20 w-24 rounded-sm border-2 ${index === currentIndex ? 'border-2 border-sky-600' : ''}`}
+                  onClick={() => handleThumbnailClick(index)}
+                >
+                  <img src={img.thumbnailUrl} alt={`Thumbnail ${index + 1}`} className='h-full w-full object-cover rounded' />
+                </button>
+              ))}
+            </div>
+            <ScrollBar orientation='horizontal' />
+          </ScrollArea>
+        )}
       </DialogContent>
     </Dialog>
   );

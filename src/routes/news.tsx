@@ -13,14 +13,14 @@ type HomeParams = {
 
 const validateSearch = (search: unknown): HomeParams => {
   if (typeof search !== 'object' || search === null) {
-    return { page: 1, category: 'wszystkie' };
+    return { page: 1, category: 'all' };
   }
 
   const searchObj = search as Record<string, unknown>;
 
   const page = typeof searchObj.page === 'number' && searchObj.page > 0 ? searchObj.page : 1;
 
-  const category = typeof searchObj.category === 'string' ? searchObj.category : 'wszystkie';
+  const category = typeof searchObj.category === 'string' ? searchObj.category : 'all';
 
   return { page, category };
 };

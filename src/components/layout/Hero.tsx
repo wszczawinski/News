@@ -1,3 +1,4 @@
+import { Link } from '@tanstack/react-router';
 import { useSuspenseQuery } from '@tanstack/react-query';
 
 import logo from '@/images/logo.png';
@@ -14,7 +15,9 @@ export const Hero = () => {
   return (
     <div className='md:px-6 md:bg-gradient-to-t via-[#79BAEF] via-60% from-background to-[#2074AF]'>
       <div className='w-full mx-auto max-w-screen-lg flex flex-row justify-between items-center'>
-        <img className='hidden md:block md:h-40 md:mb-[-28px]' src={logo} alt='logo' />
+        <Link to='/'>
+          <img className='hidden md:block md:h-40 md:mb-[-28px]' src={logo} alt='logo' />
+        </Link>
         {banner && (
           <ProgressiveImage
             className='w-full md:rounded md:h-[75px] md:w-[375px] lg:h-[100px] lg:w-[500px]'
