@@ -119,3 +119,41 @@
     @apply bg-white sm:bg-background text-foreground;
   }
 }
+
+@keyframes gallery-image-fade-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes gallery-image-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+::view-transition-group(gallery-image) {
+  animation: none;
+}
+
+::view-transition-old(gallery-image),
+::view-transition-new(gallery-image) {
+  animation-duration: 180ms;
+  animation-timing-function: ease;
+  animation-fill-mode: both;
+  mix-blend-mode: normal;
+}
+
+::view-transition-old(gallery-image) {
+  animation-name: gallery-image-fade-out;
+}
+
+::view-transition-new(gallery-image) {
+  animation-name: gallery-image-fade-in;
+}

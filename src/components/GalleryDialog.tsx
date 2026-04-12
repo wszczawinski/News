@@ -1,7 +1,9 @@
 import { useState, useEffect, useRef, type ReactNode, type TouchEvent } from 'react';
+import { flushSync } from 'react-dom';
 import { ArrowLeft, ArrowRight, GalleryThumbnails } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
+import { Drawer, DrawerContent, DrawerTrigger } from '@/components/ui/drawer';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import { useScreenSize } from '@/hooks/useScreenSize';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
@@ -16,6 +18,10 @@ type GalleryProps = {
 
 const mediaUrl = import.meta.env.VITE_MEDIA_URL;
 
+type DocumentWithViewTransition = Document & {
+  startViewTransition?: (callback: () => void) => void;
+};
+
 const buildMediaUrl = ({ folder, filename }: { folder: string; filename: string }): string => {
   return `${mediaUrl}/media/${folder}/${filename}`;
 };
@@ -27,7 +33,7 @@ export const GalleryDialog = ({ media, title, startIndex, children }: GalleryPro
     thumbnailUrl: buildMediaUrl({ folder: media.folder + '/thumbnail', filename: file.thumbnail165 }),
   }));
 
-  const { isMobile, isDesktop } = useScreenSize();
+  const { isDesktop } = useScreenSize();
   const [open, setOpen] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(startIndex ?? 0);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
@@ -53,26 +59,73 @@ export const GalleryDialog = ({ media, title, startIndex, children }: GalleryPro
 
   const goToPrevious = () => {
     const newIndex = currentIndex > 0 ? currentIndex - 1 : images.length - 1;
-    setCurrentIndex(newIndex);
+    const documentWithTransition = document as DocumentWithViewTransition;
+    if (documentWithTransition.startViewTransition) {
+      documentWithTransition.startViewTransition(() => {
+        flushSync(() => {
+          setCurrentIndex(newIndex);
+        });
+      });
+    } else {
+      setCurrentIndex(newIndex);
+    }
     scrollThumbnailIntoView(newIndex);
   };
 
   const goToNext = () => {
     const newIndex = currentIndex < images.length - 1 ? currentIndex + 1 : 0;
-    setCurrentIndex(newIndex);
+    const documentWithTransition = document as DocumentWithViewTransition;
+    if (documentWithTransition.startViewTransition) {
+      documentWithTransition.startViewTransition(() => {
+        flushSync(() => {
+          setCurrentIndex(newIndex);
+        });
+      });
+    } else {
+      setCurrentIndex(newIndex);
+    }
     scrollThumbnailIntoView(newIndex);
   };
 
   const goToPreviousMobile = () => {
-    setCurrentIndex(prev => (prev > 0 ? prev - 1 : images.length - 1));
+    const newIndex = currentIndex > 0 ? currentIndex - 1 : images.length - 1;
+    const documentWithTransition = document as DocumentWithViewTransition;
+    if (documentWithTransition.startViewTransition) {
+      documentWithTransition.startViewTransition(() => {
+        flushSync(() => {
+          setCurrentIndex(newIndex);
+        });
+      });
+    } else {
+      setCurrentIndex(newIndex);
+    }
   };
 
   const goToNextMobile = () => {
-    setCurrentIndex(prev => (prev < images.length - 1 ? prev + 1 : 0));
+    const newIndex = currentIndex < images.length - 1 ? currentIndex + 1 : 0;
+    const documentWithTransition = document as DocumentWithViewTransition;
+    if (documentWithTransition.startViewTransition) {
+      documentWithTransition.startViewTransition(() => {
+        flushSync(() => {
+          setCurrentIndex(newIndex);
+        });
+      });
+    } else {
+      setCurrentIndex(newIndex);
+    }
   };
 
   const handleThumbnailClick = (index: number) => {
-    setCurrentIndex(index);
+    const documentWithTransition = document as DocumentWithViewTransition;
+    if (documentWithTransition.startViewTransition) {
+      documentWithTransition.startViewTransition(() => {
+        flushSync(() => {
+          setCurrentIndex(index);
+        });
+      });
+    } else {
+      setCurrentIndex(index);
+    }
   };
 
   const handleTouchStart = (e: TouchEvent<HTMLDivElement>) => {
@@ -126,7 +179,53 @@ export const GalleryDialog = ({ media, title, startIndex, children }: GalleryPro
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open, currentIndex]);
 
-  return (
+  return !isDesktop ? (
+    <Drawer open={open} onOpenChange={setOpen}>
+      <DrawerTrigger asChild>
+        {children ? (
+          children
+        ) : (
+          <Button variant='outline' size='sm' className='cursor-pointer'>
+            <GalleryThumbnails />
+          </Button>
+        )}
+      </DrawerTrigger>
+      <DrawerContent className='h-[80vh]'>
+        <p className='sr-only'>
+          Image gallery with {images.length} {images.length === 1 ? 'image' : 'images'}
+        </p>
+
+        <div className='flex-1 min-h-0 px-2 pb-4 flex flex-col'>
+          <div
+            className='flex-1 min-h-0 w-full flex justify-center items-center overflow-hidden'
+            onTouchStart={handleTouchStart}
+            onTouchEnd={handleTouchEnd}
+          >
+            <img
+              src={images[currentIndex].url}
+              alt={`Image ${currentIndex + 1}`}
+              className='w-full h-full max-w-full max-h-full object-contain object-center'
+              style={{ viewTransitionName: 'gallery-image-mobile' }}
+            />
+          </div>
+
+          <div className='flex justify-center items-center gap-4 mt-auto pt-3'>
+            <Button variant='outline' size='icon' onClick={goToPreviousMobile}>
+              <ArrowLeft className='h-4 w-4' />
+            </Button>
+
+            <div className='px-3 py-2 rounded text-sm'>
+              {currentIndex + 1} / {images.length}
+            </div>
+
+            <Button variant='outline' size='icon' onClick={goToNextMobile}>
+              <ArrowRight className='h-4 w-4' />
+            </Button>
+          </div>
+        </div>
+      </DrawerContent>
+    </Drawer>
+  ) : (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         {children ? (
@@ -137,27 +236,25 @@ export const GalleryDialog = ({ media, title, startIndex, children }: GalleryPro
           </Button>
         )}
       </DialogTrigger>
-      <DialogContent className='md:max-w-4xl' showCloseButton={!isMobile}>
-        {!isMobile && <DialogHeader>
+      <DialogContent className='md:max-w-4xl' showCloseButton>
+        <DialogHeader>
           <DialogTitle className='text-sm line-clamp-1 pr-5'>{title}</DialogTitle>
           <DialogDescription className='sr-only'>
             Image gallery with {images.length} {images.length === 1 ? 'image' : 'images'}
           </DialogDescription>
-        </DialogHeader>}
+        </DialogHeader>
 
-        {/* Main image container */}
         <div className='w-full'>
-          <div className='hidden md:flex items-center gap-2 relative'>
+          <div className='flex items-center gap-2 relative'>
             <Button variant='outline' size='icon' onClick={goToPrevious} className='flex-shrink-0'>
               <ArrowLeft className='h-4 w-4' />
             </Button>
 
-            <div className='flex-1 flex justify-center items-center min-w-0'>
-              <img
-                src={images[currentIndex].url}
-                alt={`Image ${currentIndex + 1}`}
-                className='max-h-96 max-w-full object-contain rounded md:max-h-[510px]'
-              />
+            <div
+              className='flex-1 min-w-0 flex justify-center items-center h-96 md:h-[510px]'
+              style={{ viewTransitionName: 'gallery-image' }}
+            >
+              <img src={images[currentIndex].url} alt={`Image ${currentIndex + 1}`} className='h-full w-full object-contain rounded' />
             </div>
 
             <Button variant='outline' size='icon' onClick={goToNext} className='flex-shrink-0'>
@@ -166,31 +263,6 @@ export const GalleryDialog = ({ media, title, startIndex, children }: GalleryPro
 
             <div className='absolute top-0 right-0 bg-black/60 text-white px-3 py-2 rounded text-sm'>
               {currentIndex + 1} / {images.length}
-            </div>
-          </div>
-
-          {/* Mobile layout - buttons below image */}
-          <div className='md:hidden'>
-            <div className='flex justify-center items-center' onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
-              <img
-                src={images[currentIndex].url}
-                alt={`Image ${currentIndex + 1}`}
-                className='max-h-96 max-w-full object-contain rounded'
-              />
-            </div>
-
-            <div className='flex justify-center items-center gap-4 mt-2'>
-              <Button variant='outline' size='icon' onClick={goToPreviousMobile}>
-                <ArrowLeft className='h-4 w-4' />
-              </Button>
-
-              <div className='px-3 py-2 rounded text-sm'>
-                {currentIndex + 1} / {images.length}
-              </div>
-
-              <Button variant='outline' size='icon' onClick={goToNextMobile}>
-                <ArrowRight className='h-4 w-4' />
-              </Button>
             </div>
           </div>
         </div>
