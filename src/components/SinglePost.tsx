@@ -62,7 +62,7 @@ export const SinglePost = ({ post }: { post: Post }) => {
                 showContent ? 'opacity-0 pointer-events-none absolute inset-0' : 'opacity-100'
               }`}
             >
-              <div className='flex flex-wrap gap-4 justify-around'>
+              <div className='flex flex-wrap gap-5 justify-center'>
                 {post.media.mediaFiles.map((image, index) => (
                   <GalleryDialog key={image.thumbnail165} media={post.media} title={post.title} startIndex={index}>
                     <img
