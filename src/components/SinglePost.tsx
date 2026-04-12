@@ -1,7 +1,8 @@
 import { useState } from 'react';
-import { Images, TextInitial } from 'lucide-react';
+import { ChevronLeft, Home, Images, TextInitial } from 'lucide-react';
 
 import type { Post } from '@/types';
+import { useScreenSize } from '@/hooks/useScreenSize';
 
 import { FormattedDate } from './FormattedDate';
 import { GalleryDialog } from './GalleryDialog';
@@ -16,6 +17,7 @@ const buildMediaUrl = ({ folder, filename }: { folder: string; filename: string 
 
 export const SinglePost = ({ post }: { post: Post }) => {
   const [showContent, setShowContent] = useState(true);
+  const { isMobile } = useScreenSize();
   const postContent = post.content.replaceAll('/resources/post_content/', `${mediaUrl}/post_content/`);
   const thumbnailUrl = mediaUrl + '/post/thumbnail/' + post.thumbnail;
 
@@ -31,15 +33,22 @@ export const SinglePost = ({ post }: { post: Post }) => {
         </span>
 
         <div className='flex justify-between'>
+          {isMobile && (
+            <BackButton>
+              <ChevronLeft />
+            </BackButton>
+          )}
+
           <FormattedDate date={post.createdAt} />
-          <div className='flex items-center justify-center gap-2'>
-            {post.media && <GalleryDialog media={post.media} title={post.title} />}
-            {post.media && (
+
+          {post.media && (
+            <div className='flex items-center justify-center gap-2'>
+              {!isMobile && <GalleryDialog media={post.media} title={post.title} />}
               <Button variant='outline' size='sm' onClick={handleShowGallery} className='cursor-pointer'>
                 {showContent ? <Images /> : <TextInitial />}
               </Button>
-            )}
-          </div>
+            </div>
+          )}
         </div>
         <div className='relative'>
           <div
@@ -78,7 +87,9 @@ export const SinglePost = ({ post }: { post: Post }) => {
         </div>
       </div>
       <div className='flex justify-center pt-4'>
-        <BackButton />
+        <BackButton>
+          <Home />
+        </BackButton>
       </div>
     </>
   );

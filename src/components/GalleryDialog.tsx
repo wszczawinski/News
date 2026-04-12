@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, type ReactNode } from 'react';
+import { useState, useEffect, useRef, type ReactNode, type TouchEvent } from 'react';
 import { ArrowLeft, ArrowRight, GalleryThumbnails } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
@@ -27,11 +27,12 @@ export const GalleryDialog = ({ media, title, startIndex, children }: GalleryPro
     thumbnailUrl: buildMediaUrl({ folder: media.folder + '/thumbnail', filename: file.thumbnail165 }),
   }));
 
-  const { isDesktop } = useScreenSize();
+  const { isMobile, isDesktop } = useScreenSize();
   const [open, setOpen] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(startIndex ?? 0);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const thumbnailRefs = useRef<(HTMLButtonElement | null)[]>([]);
+  const touchStartRef = useRef<{ x: number; y: number } | null>(null);
 
   const scrollThumbnailIntoView = (index: number) => {
     const thumbnailElement = thumbnailRefs.current[index];
@@ -74,6 +75,31 @@ export const GalleryDialog = ({ media, title, startIndex, children }: GalleryPro
     setCurrentIndex(index);
   };
 
+  const handleTouchStart = (e: TouchEvent<HTMLDivElement>) => {
+    const touch = e.touches[0];
+    touchStartRef.current = { x: touch.clientX, y: touch.clientY };
+  };
+
+  const handleTouchEnd = (e: TouchEvent<HTMLDivElement>) => {
+    if (!touchStartRef.current) return;
+
+    const touch = e.changedTouches[0];
+    const deltaX = touch.clientX - touchStartRef.current.x;
+    const deltaY = touch.clientY - touchStartRef.current.y;
+    const minSwipeDistance = 40;
+
+    // Only treat primarily horizontal moves as gallery swipes.
+    if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > minSwipeDistance) {
+      if (deltaX > 0) {
+        goToPreviousMobile();
+      } else {
+        goToNextMobile();
+      }
+    }
+
+    touchStartRef.current = null;
+  };
+
   useEffect(() => {
     if (open) {
       setCurrentIndex(startIndex ?? 0);
@@ -111,13 +137,13 @@ export const GalleryDialog = ({ media, title, startIndex, children }: GalleryPro
           </Button>
         )}
       </DialogTrigger>
-      <DialogContent className='md:max-w-4xl'>
-        <DialogHeader>
+      <DialogContent className='md:max-w-4xl' showCloseButton={!isMobile}>
+        {!isMobile && <DialogHeader>
           <DialogTitle className='text-sm line-clamp-1 pr-5'>{title}</DialogTitle>
           <DialogDescription className='sr-only'>
             Image gallery with {images.length} {images.length === 1 ? 'image' : 'images'}
           </DialogDescription>
-        </DialogHeader>
+        </DialogHeader>}
 
         {/* Main image container */}
         <div className='w-full'>
@@ -145,7 +171,7 @@ export const GalleryDialog = ({ media, title, startIndex, children }: GalleryPro
 
           {/* Mobile layout - buttons below image */}
           <div className='md:hidden'>
-            <div className='flex justify-center items-center'>
+            <div className='flex justify-center items-center' onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
               <img
                 src={images[currentIndex].url}
                 alt={`Image ${currentIndex + 1}`}
