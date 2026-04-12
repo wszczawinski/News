@@ -33,13 +33,13 @@ export const SinglePost = ({ post }: { post: Post }) => {
         </span>
 
         <div className='flex justify-between'>
-          {isMobile && (
+          {isMobile ? (
             <BackButton>
               <ChevronLeft />
             </BackButton>
+          ) : (
+            <FormattedDate date={post.createdAt} />
           )}
-
-          <FormattedDate date={post.createdAt} />
 
           {post.media && (
             <div className='flex items-center justify-center gap-2'>
@@ -86,7 +86,8 @@ export const SinglePost = ({ post }: { post: Post }) => {
           )}
         </div>
       </div>
-      <div className='flex justify-center pt-4'>
+      <div className='flex justify-between sm:justify-center pt-4'>
+        {isMobile && <FormattedDate date={post.createdAt} />}
         <BackButton>
           <Home />
         </BackButton>
