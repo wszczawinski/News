@@ -30,6 +30,11 @@ export const SinglePost = ({ post }: { post: Post }) => {
       <div className='space-y-3 sm:bg-card sm:shadow-sm sm:rounded-sm sm:border sm:p-4 sm:min-h-64'>
         <span className='flex flex-row justify-between'>
           <h4 className='text-lg text-sky-600 font-semibold tracking-tight sm:text-xl'>{post.title}</h4>
+          {isMobile && post.media && (
+            <Button variant='outline' size='sm' onClick={handleShowGallery} className='cursor-pointer'>
+              {showContent ? <Images /> : <TextInitial />}
+            </Button>
+          )}
         </span>
 
         <div className='flex justify-between'>
@@ -41,13 +46,17 @@ export const SinglePost = ({ post }: { post: Post }) => {
             <FormattedDate date={post.createdAt} />
           )}
 
-          {post.media && (
-            <div className='flex items-center justify-center gap-2'>
-              {!isMobile && <GalleryDialog media={post.media} title={post.title} />}
-              <Button variant='outline' size='sm' onClick={handleShowGallery} className='cursor-pointer'>
-                {showContent ? <Images /> : <TextInitial />}
-              </Button>
-            </div>
+          {isMobile ? (
+            <FormattedDate date={post.createdAt} />
+          ) : (
+            post.media && (
+              <div className='flex items-center justify-center gap-2'>
+                {!isMobile && <GalleryDialog media={post.media} title={post.title} />}
+                <Button variant='outline' size='sm' onClick={handleShowGallery} className='cursor-pointer'>
+                  {showContent ? <Images /> : <TextInitial />}
+                </Button>
+              </div>
+            )
           )}
         </div>
         <div className='relative'>
@@ -86,8 +95,7 @@ export const SinglePost = ({ post }: { post: Post }) => {
           )}
         </div>
       </div>
-      <div className='flex justify-between sm:justify-center pt-4'>
-        {isMobile && <FormattedDate date={post.createdAt} />}
+      <div className='flex justify-center pt-4'>
         <BackButton>
           <Home />
         </BackButton>

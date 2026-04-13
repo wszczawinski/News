@@ -37,7 +37,7 @@ export const Navbar = () => {
             <img width={136} height={28} src={logo_desktop} alt='e-Lubawa logo' />
           </Link>
         </div>
-        <div className='flex flex-row gap-4 items-center justify-between'>
+        <div className='flex flex-row gap-6 items-center justify-between'>
           {(pathname === '/' || pathname.includes('news')) && <CategorySelect />}
           <nav className='hidden sm:flex font-medium flex-row items-center justify-end gap-5 lg:gap-8'>
             <NavContent onClick={() => setOpen(false)} />
