@@ -13,9 +13,20 @@ export const useScreenSize = () => {
   const [screenSize, setScreenSize] = useState(getScreenSize);
 
   useEffect(() => {
-    const handleResize = () => setScreenSize(getScreenSize());
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    const mobileQuery = window.matchMedia(`(max-width: ${MOBILE_BREAKPOINT - 1}px)`);
+    const tabletQuery = window.matchMedia(`(max-width: ${TABLET_BREAKPOINT - 1}px)`);
+
+    const handleQueryChange = () => {
+      setScreenSize(getScreenSize());
+    };
+
+    mobileQuery.addEventListener('change', handleQueryChange);
+    tabletQuery.addEventListener('change', handleQueryChange);
+
+    return () => {
+      mobileQuery.removeEventListener('change', handleQueryChange);
+      tabletQuery.removeEventListener('change', handleQueryChange);
+    };
   }, []);
 
   return screenSize;
