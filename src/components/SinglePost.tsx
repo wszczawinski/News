@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { ChevronLeft, Home, Images, TextInitial } from 'lucide-react';
 
 import type { Post } from '@/types';
@@ -18,7 +18,7 @@ const buildMediaUrl = ({ folder, filename }: { folder: string; filename: string 
 export const SinglePost = ({ post }: { post: Post }) => {
   const [showContent, setShowContent] = useState(true);
   const { isMobile } = useScreenSize();
-  const postContent = post.content.replaceAll('/resources/post_content/', `${mediaUrl}/post_content/`);
+  const postContent = useMemo(() => post.content.replaceAll('/resources/post_content/', `${mediaUrl}/post_content/`), [post.content]);
   const thumbnailUrl = mediaUrl + '/post/thumbnail/' + post.thumbnail;
 
   const handleShowGallery = () => {
