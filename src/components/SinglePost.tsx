@@ -8,6 +8,7 @@ import { FormattedDate } from './FormattedDate';
 import { GalleryDialog } from './GalleryDialog';
 import { BackButton } from './BackButton';
 import { Button } from './ui/button';
+import './SinglePost.css';
 
 const mediaUrl = import.meta.env.VITE_MEDIA_URL;
 
@@ -71,7 +72,7 @@ export const SinglePost = ({ post }: { post: Post }) => {
               alt='Post thumbnail'
             />
 
-            <div className='text-sm text-justify space-y-3' dangerouslySetInnerHTML={{ __html: postContent }} />
+            <div className='post-content text-sm text-justify space-y-3' dangerouslySetInnerHTML={{ __html: postContent }} />
           </div>
 
           {post.media && (

@@ -1,0 +1,27 @@
+.post-content a {
+  color: var(--color-primary);
+  overflow-wrap: anywhere;
+}
+
+.post-content a:hover {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.post-content ul,
+.post-content ol {
+  margin: 0.75rem 0;
+  padding-left: 1.25rem;
+}
+
+.post-content img,
+.post-content iframe {
+  max-width: 100%;
+  height: auto;
+}
+
+.post-content .image img,
+.post-content .image img[align='center'] {
+  display: block;
+  margin-inline: auto;
+}
