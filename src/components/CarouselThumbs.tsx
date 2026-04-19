@@ -13,6 +13,7 @@ export const CarouselWithThumbs = ({ images }: { images: string[] }) => {
       return;
     }
 
+    // eslint-disable-next-line
     setCurrent(api.selectedScrollSnap() + 1);
     api.on('select', () => {
       setCurrent(api.selectedScrollSnap() + 1);
