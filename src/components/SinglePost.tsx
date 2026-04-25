@@ -9,6 +9,7 @@ import { GalleryDialog } from './GalleryDialog';
 import { BackButton } from './BackButton';
 import { Button } from './ui/button';
 import './SinglePost.css';
+import { Gallery } from './Gallery';
 
 const mediaUrl = import.meta.env.VITE_MEDIA_URL;
 
@@ -19,7 +20,9 @@ const buildMediaUrl = ({ folder, filename }: { folder: string; filename: string 
 export const SinglePost = ({ post }: { post: Post }) => {
   const [showContent, setShowContent] = useState(true);
   const { isMobile } = useScreenSize();
+
   const postContent = useMemo(() => post.content.replaceAll('/resources/post_content/', `${mediaUrl}/post_content/`), [post.content]);
+
   const thumbnailUrl = mediaUrl + '/post/thumbnail/' + post.thumbnail;
 
   const handleShowGallery = () => {
@@ -60,6 +63,7 @@ export const SinglePost = ({ post }: { post: Post }) => {
             )
           )}
         </div>
+
         <div className='relative'>
           <div
             className={`transition-opacity duration-200 ease-in-out ${
@@ -83,13 +87,13 @@ export const SinglePost = ({ post }: { post: Post }) => {
             >
               <div className='flex flex-wrap gap-5 justify-center'>
                 {post.media.mediaFiles.map((image, index) => (
-                  <GalleryDialog key={image.thumbnail165} media={post.media} title={post.title} startIndex={index}>
+                  <Gallery key={image.thumbnail165} media={post.media} title={post.title} startIndex={index}>
                     <img
                       src={buildMediaUrl({ folder: post.media.folder + '/thumbnail', filename: image.thumbnail165 })}
                       alt={`Thumbnail ${index + 1}`}
                       className='w-[46%] max-w-[165px] object-cover rounded-xs cursor-pointer'
                     />
-                  </GalleryDialog>
+                  </Gallery>
                 ))}
               </div>
             </div>

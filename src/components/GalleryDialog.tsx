@@ -1,27 +1,17 @@
-import { useState, useEffect, useMemo, useRef, useCallback, type ReactNode, type TouchEvent } from 'react';
+import { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import { ArrowLeft, ArrowRight, GalleryThumbnails } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
-import { Drawer, DrawerContent, DrawerTrigger } from '@/components/ui/drawer';
-import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
-import { useScreenSize } from '@/hooks/useScreenSize';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import type { Media } from '@/types';
+import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
+import { buildMediaUrl } from '@/lib/utils';
 
-type GalleryProps = {
-  title: string;
-  media: Media;
-  startIndex?: number;
-  children?: ReactNode;
-};
-
-const mediaUrl = import.meta.env.VITE_MEDIA_URL;
-
-const buildMediaUrl = ({ folder, filename }: { folder: string; filename: string }): string => {
-  return `${mediaUrl}/media/${folder}/${filename}`;
-};
+import type { GalleryProps } from './Gallery';
 
 export const GalleryDialog = ({ media, title, startIndex, children }: GalleryProps) => {
+  const [open, setOpen] = useState(false);
+  const [currentIndex, setCurrentIndex] = useState(startIndex ?? 0);
+
   const images = useMemo(
     () =>
       media.mediaFiles.map(file => ({
@@ -31,212 +21,74 @@ export const GalleryDialog = ({ media, title, startIndex, children }: GalleryPro
     [media]
   );
 
-  const { isDesktop } = useScreenSize();
-  const [open, setOpen] = useState(false);
-  const [currentIndex, setCurrentIndex] = useState(startIndex ?? 0);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
-  const scrollViewportRef = useRef<HTMLElement | null>(null);
   const thumbnailRefs = useRef<(HTMLButtonElement | null)[]>([]);
-  const touchStartRef = useRef<{ x: number; y: number } | null>(null);
-  const currentIndexRef = useRef(startIndex ?? 0);
-  const wasOpenRef = useRef(false);
 
-  const getScrollViewport = useCallback(() => {
-    if (scrollViewportRef.current && scrollAreaRef.current?.contains(scrollViewportRef.current)) {
-      return scrollViewportRef.current;
+  const scrollThumbnailIntoView = useCallback((index: number, behavior: ScrollBehavior = 'smooth') => {
+    const thumbnailElement = thumbnailRefs.current[index];
+    const scrollContainer = scrollAreaRef.current?.querySelector<HTMLElement>('[data-radix-scroll-area-viewport]') ?? null;
+
+    if (thumbnailElement && scrollContainer) {
+      const containerWidth = scrollContainer.clientWidth;
+      const thumbnailWidth = thumbnailElement.offsetWidth;
+      const scrollLeft = thumbnailElement.offsetLeft - containerWidth / 2 + thumbnailWidth / 2;
+
+      scrollContainer.scrollTo({
+        left: Math.max(0, scrollLeft),
+        behavior,
+      });
     }
-
-    const viewport = scrollAreaRef.current?.querySelector<HTMLElement>('[data-radix-scroll-area-viewport]') ?? null;
-    scrollViewportRef.current = viewport;
-
-    return viewport;
-  }, []);
-
-  const scrollThumbnailIntoView = useCallback(
-    (index: number, behavior: ScrollBehavior = 'smooth') => {
-      const thumbnailElement = thumbnailRefs.current[index];
-      const scrollContainer = getScrollViewport();
-
-      if (thumbnailElement && scrollContainer) {
-        const containerWidth = scrollContainer.clientWidth;
-        const thumbnailWidth = thumbnailElement.offsetWidth;
-        const scrollLeft = thumbnailElement.offsetLeft - containerWidth / 2 + thumbnailWidth / 2;
-
-        scrollContainer.scrollTo({
-          left: Math.max(0, scrollLeft),
-          behavior,
-        });
-      }
-    },
-    [getScrollViewport]
-  );
-
-  const setIndexWithTransition = useCallback((newIndex: number) => {
-    setCurrentIndex(newIndex);
   }, []);
 
   const navigateBy = useCallback(
-    (delta: number, shouldScrollThumbnail: boolean) => {
+    (delta: number) => {
       if (images.length === 0) return;
-
-      const newIndex = (currentIndexRef.current + delta + images.length) % images.length;
-      currentIndexRef.current = newIndex;
-      setIndexWithTransition(newIndex);
-
-      if (shouldScrollThumbnail) {
-        scrollThumbnailIntoView(newIndex);
-      }
+      setCurrentIndex(prev => (prev + delta + images.length) % images.length);
     },
-    [images.length, setIndexWithTransition, scrollThumbnailIntoView]
+    [images.length]
   );
-
-  const goToPrevious = useCallback(() => {
-    navigateBy(-1, true);
-  }, [navigateBy]);
-
-  const goToNext = useCallback(() => {
-    navigateBy(1, true);
-  }, [navigateBy]);
-
-  const goToPreviousMobile = useCallback(() => {
-    navigateBy(-1, false);
-  }, [navigateBy]);
-
-  const goToNextMobile = useCallback(() => {
-    navigateBy(1, false);
-  }, [navigateBy]);
 
   const handleOpenChange = useCallback(
     (nextOpen: boolean) => {
       setOpen(nextOpen);
-
       if (nextOpen) {
-        const initialIndex = startIndex ?? 0;
-        currentIndexRef.current = initialIndex;
-        setCurrentIndex(initialIndex);
+        setCurrentIndex(startIndex ?? 0);
       }
     },
     [startIndex]
   );
 
-  const handleThumbnailClick = useCallback(
-    (index: number) => {
-      currentIndexRef.current = index;
-      setIndexWithTransition(index);
-    },
-    [setIndexWithTransition]
-  );
-
-  const handleTouchStart = (e: TouchEvent<HTMLDivElement>) => {
-    const touch = e.touches[0];
-    touchStartRef.current = { x: touch.clientX, y: touch.clientY };
-  };
-
-  const handleTouchEnd = (e: TouchEvent<HTMLDivElement>) => {
-    if (!touchStartRef.current) return;
-
-    const touch = e.changedTouches[0];
-    const deltaX = touch.clientX - touchStartRef.current.x;
-    const deltaY = touch.clientY - touchStartRef.current.y;
-    const minSwipeDistance = 40;
-
-    // Only treat primarily horizontal moves as gallery swipes.
-    if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > minSwipeDistance) {
-      if (deltaX > 0) {
-        goToPreviousMobile();
-      } else {
-        goToNextMobile();
-      }
-    }
-
-    touchStartRef.current = null;
-  };
+  useEffect(() => {
+    if (!open) return;
+    scrollThumbnailIntoView(currentIndex);
+  }, [currentIndex, open, scrollThumbnailIntoView]);
 
   useEffect(() => {
-    const isOpening = open && !wasOpenRef.current;
-    let frameId: number | undefined;
-
-    if (isOpening) {
-      if (isDesktop) {
-        const initialIndex = startIndex ?? 0;
-        frameId = requestAnimationFrame(() => {
-          scrollThumbnailIntoView(initialIndex, 'auto');
-        });
-      }
-    }
-
-    wasOpenRef.current = open;
-    return () => {
-      if (frameId !== undefined) {
-        cancelAnimationFrame(frameId);
-      }
-    };
-  }, [open, startIndex, isDesktop, scrollThumbnailIntoView]);
+    if (!open) return;
+    const frameId = requestAnimationFrame(() => {
+      scrollThumbnailIntoView(startIndex ?? 0, 'auto');
+    });
+    return () => cancelAnimationFrame(frameId);
+  }, [open, startIndex, scrollThumbnailIntoView]);
 
   useEffect(() => {
     if (!open) return;
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'ArrowLeft') {
         e.preventDefault();
-        goToPrevious();
+        navigateBy(-1);
       }
       if (e.key === 'ArrowRight') {
         e.preventDefault();
-        goToNext();
+        navigateBy(1);
       }
       if (e.key === 'Escape') setOpen(false);
     };
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
-  }, [open, goToPrevious, goToNext]);
+  }, [open, navigateBy]);
 
-  return !isDesktop ? (
-    <Drawer open={open} onOpenChange={handleOpenChange}>
-      <DrawerTrigger asChild>
-        {children ? (
-          children
-        ) : (
-          <Button variant='outline' size='sm' className='cursor-pointer'>
-            <GalleryThumbnails />
-          </Button>
-        )}
-      </DrawerTrigger>
-      <DrawerContent className='h-[80vh]'>
-        <p className='sr-only'>
-          Image gallery with {images.length} {images.length === 1 ? 'image' : 'images'}
-        </p>
-
-        <div className='flex-1 min-h-0 px-2 pb-4 flex flex-col'>
-          <div
-            className='flex-1 min-h-0 w-full flex justify-center items-center overflow-hidden'
-            onTouchStart={handleTouchStart}
-            onTouchEnd={handleTouchEnd}
-          >
-            <img
-              src={images[currentIndex].url}
-              alt={`Image ${currentIndex + 1}`}
-              className='w-full h-full max-w-full max-h-full object-contain object-center'
-              style={{ viewTransitionName: 'gallery-image-mobile' }}
-            />
-          </div>
-
-          <div className='flex justify-center items-center gap-4 mt-auto pt-3'>
-            <Button variant='outline' size='icon' onClick={goToPreviousMobile} className='cursor-pointer'>
-              <ArrowLeft className='h-4 w-4' />
-            </Button>
-
-            <div className='px-3 py-2 rounded text-sm'>
-              {currentIndex + 1} / {images.length}
-            </div>
-
-            <Button variant='outline' size='icon' onClick={goToNextMobile} className='cursor-pointer'>
-              <ArrowRight className='h-4 w-4' />
-            </Button>
-          </div>
-        </div>
-      </DrawerContent>
-    </Drawer>
-  ) : (
+  return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>
         {children ? (
@@ -265,7 +117,7 @@ export const GalleryDialog = ({ media, title, startIndex, children }: GalleryPro
               aria-label='Previous image'
               tabIndex={-1}
               className='group/left absolute inset-y-0 left-0 z-10 w-1/2 cursor-pointer'
-              onClick={goToPrevious}
+              onClick={() => navigateBy(-1)}
             >
               <span className='pointer-events-none absolute left-2 top-1/2 flex size-9 -translate-y-1/2 items-center justify-center rounded-md border bg-background/90 opacity-0 transition-opacity group-hover/left:opacity-100'>
                 <ArrowLeft className='h-4 w-4' />
@@ -276,7 +128,7 @@ export const GalleryDialog = ({ media, title, startIndex, children }: GalleryPro
               aria-label='Next image'
               tabIndex={-1}
               className='group/right absolute inset-y-0 right-0 z-10 w-1/2 cursor-pointer'
-              onClick={goToNext}
+              onClick={() => navigateBy(1)}
             >
               <span className='pointer-events-none absolute right-2 top-1/2 flex size-9 -translate-y-1/2 items-center justify-center rounded-md border bg-background/90 opacity-0 transition-opacity group-hover/right:opacity-100'>
                 <ArrowRight className='h-4 w-4' />
@@ -301,7 +153,7 @@ export const GalleryDialog = ({ media, title, startIndex, children }: GalleryPro
                   thumbnailRefs.current[index] = el;
                 }}
                 className={`h-18 w-24 rounded-sm border-2 ${index === currentIndex ? 'border-2 border-sky-600' : ''}`}
-                onClick={() => handleThumbnailClick(index)}
+                onClick={() => setCurrentIndex(index)}
               >
                 <img src={img.thumbnailUrl} alt={`Thumbnail ${index + 1}`} className='h-full w-full object-cover rounded' />
               </button>

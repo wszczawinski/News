@@ -17,7 +17,13 @@ export const useScreenSize = () => {
     const tabletQuery = window.matchMedia(`(max-width: ${TABLET_BREAKPOINT - 1}px)`);
 
     const handleQueryChange = () => {
-      setScreenSize(getScreenSize());
+      setScreenSize(prev => {
+        const next = getScreenSize();
+        if (prev.isMobile === next.isMobile && prev.isTablet === next.isTablet && prev.isDesktop === next.isDesktop) {
+          return prev;
+        }
+        return next;
+      });
     };
 
     mobileQuery.addEventListener('change', handleQueryChange);
