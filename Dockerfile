@@ -22,7 +22,6 @@ ARG VITE_SENTRY_DSN
 # Copy source code and build
 COPY . .
 RUN ls -la
-RUN test -f .env.production || cp .env .env.production
 RUN vp build
 
 # Production stage
