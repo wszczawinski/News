@@ -22,6 +22,7 @@ ARG VITE_SENTRY_DSN
 # Copy source code and build
 COPY . .
 RUN ls -la
+RUN echo "VITE_API_URL=$VITE_API_URL"
 RUN vp build
 
 # Production stage
