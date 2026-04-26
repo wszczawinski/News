@@ -4,7 +4,8 @@ npm-debug.log*
 yarn-debug.log*
 pnpm-debug.log*
 
-# Environment files
+# Environment files - exclude all, explicitly re-include example
+.env*
 !.env.example
 
 # Build output (copied from builder stage)
@@ -32,6 +33,7 @@ README.md
 # Cache
 .cache/
 .eslintcache
+.tanstack/
 
 # Logs
 *.log
@@ -40,12 +42,13 @@ logs/
 # Test coverage
 coverage/
 
-# Config files not needed in container
-.prettierrc*
-eslint.config.*
-
 # CI/CD
 .github/
 Dockerfile*
 docker-compose*.yml
 .dockerignore
+
+# Dev tooling
+.vite-hooks/
+.nvmrc
+CLAUDE.md

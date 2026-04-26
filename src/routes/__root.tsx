@@ -24,8 +24,8 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
           <Outlet />
         </MainContent>
         <Footer />
-        <ReactQueryDevtools buttonPosition='top-right' />
-        <TanStackRouterDevtools position='bottom-right' />
+        {import.meta.env.DEV && <ReactQueryDevtools buttonPosition='top-right' />}
+        {import.meta.env.DEV && <TanStackRouterDevtools position='bottom-right' />}
       </React.Fragment>
     );
   },

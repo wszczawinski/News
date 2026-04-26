@@ -60,7 +60,7 @@ export const PosterDialog = ({ index, posters, children }: GalleryProps) => {
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // oxlint-disable-next-line react-hooks/exhaustive-deps
   }, [open, currentIndex]);
 
   return (

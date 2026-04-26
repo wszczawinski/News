@@ -1,20 +1,20 @@
 # Build stage
-FROM node:22-alpine AS builder
+FROM node:24-alpine AS builder
 
 WORKDIR /app
 
 # Install pnpm
-RUN npm install -g pnpm
+RUN npm install -g pnpm@10.33.2
 
 # Copy package files
-COPY package.json pnpm-lock.yaml ./
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 
 # Install dependencies
 RUN pnpm install --frozen-lockfile
 
 # Copy source code and build
 COPY . .
-RUN pnpm run build
+RUN pnpm exec tsc -b && pnpm exec vite build
 
 # Production stage
 FROM nginx:1.28-alpine
