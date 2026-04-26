@@ -39,7 +39,7 @@ export const CategorySelect = () => {
             {category !== 'all' && <span className='absolute top-1 right-1 size-2 rounded-full bg-sky-600' />}
           </SelectTrigger>
         ) : (
-          <SelectTrigger className='focus:ring-0 focus:ring-offset-0 w-[220px]'>
+          <SelectTrigger className='focus:ring-0 focus:ring-offset-0 w-[220px] bg-background/70'>
             <SelectValue placeholder='Wybierz kategorie' />
           </SelectTrigger>
         )}
