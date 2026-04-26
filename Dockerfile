@@ -14,7 +14,7 @@ RUN pnpm install --frozen-lockfile --ignore-scripts
 
 # Copy source code and build
 COPY . .
-RUN pnpm exec tsc -b && pnpm exec vite build
+RUN pnpm run build
 
 # Production stage
 FROM nginx:1.28-alpine
