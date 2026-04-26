@@ -11,12 +11,12 @@ const sortMediaFiles = (media: Media): Media => ({
 
 const selectPosts = (data: Awaited<ReturnType<typeof getPosts>>) => ({
   ...data,
-  content: data.content.map(post => ({ ...post, media: sortMediaFiles(post.media) })),
+  content: data.content.map(post => ({ ...post, media: post.media ? sortMediaFiles(post.media) : null })),
 });
 
 const selectPost = (post: Awaited<ReturnType<typeof getPost>>) => ({
   ...post,
-  media: sortMediaFiles(post.media),
+  media: post.media ? sortMediaFiles(post.media) : null,
 });
 
 export const postsQueryOptions = (params: PostsQueryParams) => {

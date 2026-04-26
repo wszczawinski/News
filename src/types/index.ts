@@ -6,7 +6,7 @@ export interface Post {
   content: string;
   createdAt: Date;
   categoryId: number;
-  media: Media;
+  media: Media | null;
   thumbnail: string;
 }
 
