@@ -3,18 +3,18 @@ FROM node:24-alpine AS builder
 
 WORKDIR /app
 
-# Install pnpm
-RUN npm install -g pnpm@10.33.2
+# Install vp (Vite+ CLI) which includes pnpm management
+RUN npm install -g vite-plus@0.1.19
 
 # Copy package files
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 
 # Install dependencies
-RUN pnpm install --frozen-lockfile --ignore-scripts
+RUN vp install --frozen-lockfile --ignore-scripts
 
 # Copy source code and build
 COPY . .
-RUN pnpm run build
+RUN vp build
 
 # Production stage
 FROM nginx:1.28-alpine
