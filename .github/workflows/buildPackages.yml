@@ -47,7 +47,7 @@ jobs:
         run: snyk auth $SNYK_TOKEN
 
       - name: 📦 Snyk Dependency Scan (SCA)
-        run: snyk test --severity-threshold=medium
+        run: snyk test --severity-threshold=medium --file=pnpm-lock.yaml
         continue-on-error: true
 
       - name: 🧠 Snyk Code Scan (SAST)
