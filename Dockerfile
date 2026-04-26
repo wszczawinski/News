@@ -10,7 +10,7 @@ RUN npm install -g pnpm@10.33.2
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 
 # Install dependencies
-RUN pnpm install --frozen-lockfile
+RUN pnpm install --frozen-lockfile --ignore-scripts
 
 # Copy source code and build
 COPY . .
