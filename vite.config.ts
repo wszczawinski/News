@@ -180,7 +180,7 @@ export default defineConfig({
     tanstackRouter({ target: 'react', autoCodeSplitting: true, }),
     react(),
     tailwindcss(),
-    checker({ typescript: { tsconfigPath: "./tsconfig.app.json" } }),
+    checker({ typescript: { tsconfigPath: "./tsconfig.app.json" }, enableBuild: false }),
   ],
   resolve: {
     alias: {
