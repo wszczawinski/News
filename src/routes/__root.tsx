@@ -15,20 +15,18 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
   loader: async ({ context: { queryClient } }) => {
     await queryClient.ensureQueryData(bannersQueryOptions());
   },
-  component: RootComponent,
+  component: () => {
+    return (
+      <React.Fragment>
+        <Hero />
+        <Navbar />
+        <MainContent>
+          <Outlet />
+        </MainContent>
+        <Footer />
+        <ReactQueryDevtools buttonPosition='top-right' />
+        <TanStackRouterDevtools position='bottom-right' />
+      </React.Fragment>
+    );
+  },
 });
-
-function RootComponent() {
-  return (
-    <React.Fragment>
-      <Hero />
-      <Navbar />
-      <MainContent>
-        <Outlet />
-      </MainContent>
-      <Footer />
-      <ReactQueryDevtools buttonPosition='top-right' />
-      <TanStackRouterDevtools position='bottom-right' />
-    </React.Fragment>
-  );
-}
