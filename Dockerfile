@@ -12,8 +12,17 @@ COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 # Install dependencies
 RUN vp install --frozen-lockfile --ignore-scripts
 
+# Declare build-time arguments (must be set in Dokploy "Build-time Arguments")
+ARG VITE_API_URL
+ARG VITE_MEDIA_URL
+ARG VITE_ANALYTICS_URL
+ARG VITE_ANALYTICS_WEBSITE_ID
+ARG VITE_SENTRY_DSN
+
 # Copy source code and build
 COPY . .
+RUN ls -la
+RUN test -f .env.production || cp .env .env.production
 RUN vp build
 
 # Production stage
