@@ -17,9 +17,13 @@ export const Gallery = ({ title, media, startIndex, children }: GalleryProps) =>
   return (
     <>
       {!isDesktop ? (
-        <GalleryDrawer title={title} media={media} startIndex={startIndex} children={children} />
+        <GalleryDrawer title={title} media={media} startIndex={startIndex}>
+          {children}
+        </GalleryDrawer>
       ) : (
-        <GalleryDialog title={title} media={media} startIndex={startIndex} children={children} />
+        <GalleryDialog title={title} media={media} startIndex={startIndex}>
+          {children}
+        </GalleryDialog>
       )}
     </>
   );
