@@ -19,7 +19,7 @@ export const PosterCarousel = ({ posters, title, delay = 3000, hasDots }: Sideba
 
   return (
     <article className={`w-full`}>
-      <p className='sm:font-medium text-sky-600 pb-1 text-center sm:text-right'>{title}</p>
+      <p className='sm:font-medium text-sky-600 pb-1 text-left sm:text-right'>{title}</p>
       <Carousel
         plugins={[
           Autoplay({

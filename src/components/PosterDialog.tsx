@@ -68,7 +68,7 @@ export const PosterDialog = ({ index, posters, children }: GalleryProps) => {
       <DialogTrigger className='w-full' asChild>
         {children}
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent className='gap-0'>
         <DialogHeader>
           <DialogDescription className='sr-only'>Posters</DialogDescription>
         </DialogHeader>
@@ -76,9 +76,11 @@ export const PosterDialog = ({ index, posters, children }: GalleryProps) => {
         {/* Main image container */}
         <div className='w-full'>
           <div className='hidden md:flex items-center gap-2 relative'>
-            <Button variant='outline' size='icon' onClick={goToPrevious} className='flex-shrink-0'>
-              <ArrowLeft className='h-4 w-4' />
-            </Button>
+            {images.length > 1 && (
+              <Button variant='outline' size='icon' onClick={goToPrevious} className='flex-shrink-0'>
+                <ArrowLeft className='h-4 w-4' />
+              </Button>
+            )}
 
             <div className='flex-1 flex justify-center items-center min-w-0'>
               <img
@@ -87,14 +89,17 @@ export const PosterDialog = ({ index, posters, children }: GalleryProps) => {
                 className='max-h-96 max-w-full object-contain rounded md:max-h-[510px]'
               />
             </div>
+            {images.length > 1 && (
+              <Button variant='outline' size='icon' onClick={goToNext} className='flex-shrink-0'>
+                <ArrowRight className='h-4 w-4' />
+              </Button>
+            )}
 
-            <Button variant='outline' size='icon' onClick={goToNext} className='flex-shrink-0'>
-              <ArrowRight className='h-4 w-4' />
-            </Button>
-
-            <div className='absolute top-0 left-0 bg-black/60 text-white px-3 py-2 rounded text-sm'>
-              {currentIndex + 1} / {images.length}
-            </div>
+            {images.length > 1 && (
+              <div className='absolute top-0 left-0 bg-black/60 text-white px-3 py-2 rounded text-sm'>
+                {currentIndex + 1} / {images.length}
+              </div>
+            )}
           </div>
 
           {/* Mobile layout - buttons below image */}
@@ -103,23 +108,25 @@ export const PosterDialog = ({ index, posters, children }: GalleryProps) => {
               <img
                 src={images[currentIndex].url}
                 alt={`Image ${currentIndex + 1}`}
-                className='max-h-96 max-w-full object-contain rounded'
+                className='py-2 max-h-104 max-w-full object-contain rounded'
               />
             </div>
 
-            <div className='flex justify-center items-center gap-4 mt-2'>
-              <Button variant='outline' size='icon' onClick={goToPreviousMobile}>
-                <ArrowLeft className='h-4 w-4' />
-              </Button>
+            {images.length > 1 && (
+              <div className='flex justify-center items-center gap-4'>
+                <Button variant='outline' size='icon' onClick={goToPreviousMobile}>
+                  <ArrowLeft className='h-4 w-4' />
+                </Button>
 
-              <div className='px-3 py-2 rounded text-sm'>
-                {currentIndex + 1} / {images.length}
+                <div className='px-3 py-2 rounded text-sm'>
+                  {currentIndex + 1} / {images.length}
+                </div>
+
+                <Button variant='outline' size='icon' onClick={goToNextMobile}>
+                  <ArrowRight className='h-4 w-4' />
+                </Button>
               </div>
-
-              <Button variant='outline' size='icon' onClick={goToNextMobile}>
-                <ArrowRight className='h-4 w-4' />
-              </Button>
-            </div>
+            )}
           </div>
         </div>
       </DialogContent>
