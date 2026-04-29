@@ -12,15 +12,25 @@ import { CategorySelect } from '@/components/CategorySelect.tsx';
 import { NavContent } from '../NavContent';
 import { Sheet, SheetContent, SheetTrigger } from '../ui/sheet';
 import { Button } from '../ui/button';
+import { bannersQueryOptions } from '@/services/queries';
+import { useSuspenseQuery } from '@tanstack/react-query';
+import { PosterCarousel } from '../PosterCarousel';
 
 export const Navbar = () => {
   const [open, setOpen] = useState(false);
   const { pathname } = useLocation();
+  const { data: banners } = useSuspenseQuery(bannersQueryOptions());
+
+  const recommends = banners.filter(b => b.type === 7);
 
   const links = [
     { link: 'http://lipy.e-lubawa.pl/', src: sanktuarium, alt: 'Sanktuarium' },
     { link: 'http://gminalubawa.pl/', src: gmina, alt: 'Gmina' },
-    { link: 'http://www.dekanat.gminalubawa.pl/', src: dziekanat, alt: 'Dziekanat' },
+    {
+      link: 'http://www.dekanat.gminalubawa.pl/',
+      src: dziekanat,
+      alt: 'Dziekanat',
+    },
   ];
 
   return (
@@ -54,7 +64,6 @@ export const Navbar = () => {
             </div>
             <SheetContent side='right'>
               <nav className='grid gap-5 text-xl font-medium p-6 pr-12'>
-                {/*<img width={169} height={29} src={logo} alt='e-Lubawa logo' />*/}
                 <NavContent onClick={() => setOpen(false)} />
                 {links.map((item, index) => (
                   <a
@@ -67,6 +76,11 @@ export const Navbar = () => {
                     <img src={item.src} alt={item.alt} className='absolute inset-0 w-full h-[200%] object-cover -translate-y-1/2' />
                   </a>
                 ))}
+                {!!recommends.length && (
+                  <div className='w-full max-w-40'>
+                    <PosterCarousel title='Zapraszamy' posters={recommends} delay={5000} hasDots={false} />
+                  </div>
+                )}
               </nav>
             </SheetContent>
           </Sheet>

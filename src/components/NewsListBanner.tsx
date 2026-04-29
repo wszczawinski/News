@@ -11,15 +11,28 @@ import { PosterAdd } from './PosterAdd';
 
 const mediaUrl = import.meta.env.VITE_MEDIA_URL;
 
-type BannerPostersProps = { ad?: Banner; recommends: Banner[]; local: Banner[] };
+type BannerPostersProps = {
+  ad?: Banner;
+  local?: Banner[];
+};
 
-const BannerPosters = ({ ad, recommends, local }: BannerPostersProps) => (
-  <div className='flex flex-row gap-3'>
-    {ad && <PosterAdd imageUrl={`${mediaUrl}/banner/${ad.image}`} name={ad.name} link={ad.link} />}
-    {!!recommends.length && <PosterCarousel title='Zapraszamy' posters={recommends} delay={8000} hasDots={false} />}
-    {!!local.length && <PosterCarousel title='Gmina' posters={local} delay={7000} hasDots={false} />}
-  </div>
-);
+const BannerPosters = ({ ad, local }: BannerPostersProps) => {
+  return (
+    <div className='flex flex-row gap-3'>
+      {ad && <PosterAdd imageUrl={`${mediaUrl}/banner/${ad.image}`} name={ad.name} link={ad.link} />}
+
+      {!!local &&
+        (local.length > 1 ? (
+          <>
+            <PosterCarousel title='Gmina' posters={[local[0]]} delay={7000} hasDots={false} />
+            <PosterCarousel title='Gmina' posters={[local[1]]} delay={7000} hasDots={false} />
+          </>
+        ) : (
+          <PosterCarousel title='Gmina' posters={local} delay={7000} hasDots={false} />
+        ))}
+    </div>
+  );
+};
 
 const BannerImage = ({ banner, className = '' }: { banner: Banner; className?: string }) => (
   <ProgressiveImage
@@ -43,20 +56,11 @@ export const NewsListBanner = ({ postIndex }: { postIndex: number }) => {
 
   const banner_local = banners.filter(b => b.type === 5);
   const banner_ad = banners.find(b => b.type === 6);
-  const banner_recommends = banners.filter(b => b.type === 7);
 
   const bannerByIndex: Record<number, ReactNode> = {
     0: banner_post_1 && <BannerImage banner={banner_post_1} />,
     1: banner_post_2 && <BannerImage banner={banner_post_2} />,
-    2: (
-      <>
-        {isMobile ? (
-          <BannerPosters ad={banner_ad} recommends={banner_recommends} local={banner_local} />
-        ) : (
-          banner_post_3 && <BannerImage banner={banner_post_3} />
-        )}
-      </>
-    ),
+    2: <>{isMobile ? <BannerPosters ad={banner_ad} local={banner_local} /> : banner_post_3 && <BannerImage banner={banner_post_3} />}</>,
     3: <>{isMobile && banner_post_3 && <BannerImage banner={banner_post_3} />}</>,
   };
 
