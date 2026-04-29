@@ -71,13 +71,13 @@ export const Navbar = () => {
                     href={item.link}
                     target='_blank'
                     rel='noreferrer'
-                    className='relative w-full max-w-48 overflow-hidden aspect-[30/9.5]'
+                    className='relative w-full max-w-40 overflow-hidden aspect-[30/9.5]'
                   >
                     <img src={item.src} alt={item.alt} className='absolute inset-0 w-full h-[200%] object-cover -translate-y-1/2' />
                   </a>
                 ))}
                 {!!recommends.length && (
-                  <div className='w-full max-w-48'>
+                  <div className='w-full max-w-40'>
                     <PosterCarousel title='Zapraszamy' posters={recommends} delay={5000} hasDots={false} />
                   </div>
                 )}
