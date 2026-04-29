@@ -11,18 +11,18 @@ const sortMediaFiles = (media: Media): Media => ({
 
 const selectPosts = (data: Awaited<ReturnType<typeof getPosts>>) => ({
   ...data,
-  content: data.content.map(post => ({ ...post, media: sortMediaFiles(post.media) })),
+  content: data.content.map(post => ({ ...post, media: post.media ? sortMediaFiles(post.media) : null })),
 });
 
 const selectPost = (post: Awaited<ReturnType<typeof getPost>>) => ({
   ...post,
-  media: sortMediaFiles(post.media),
+  media: post.media ? sortMediaFiles(post.media) : null,
 });
 
 export const postsQueryOptions = (params: PostsQueryParams) => {
   return queryOptions({
     queryKey: [QUERY_KEYS.POSTS, params],
-    queryFn: () => getPosts(params),
+    queryFn: ({ signal }) => getPosts({ ...params, signal }),
     placeholderData: keepPreviousData,
     select: selectPosts,
     staleTime: 5 * 60 * 1000, // 5min
@@ -32,7 +32,7 @@ export const postsQueryOptions = (params: PostsQueryParams) => {
 export const postQueryOptions = (params: PostQueryParams) => {
   return queryOptions({
     queryKey: [QUERY_KEYS.POST, params.id],
-    queryFn: () => getPost({ id: params.id }),
+    queryFn: ({ signal }) => getPost({ id: params.id, signal }),
     placeholderData: keepPreviousData,
     select: selectPost,
     staleTime: 30 * 60 * 1000, // 30min
@@ -42,7 +42,7 @@ export const postQueryOptions = (params: PostQueryParams) => {
 export const categoryQueryOptions = () => {
   return queryOptions({
     queryKey: [QUERY_KEYS.CATEGORIES],
-    queryFn: getCategories,
+    queryFn: ({ signal }) => getCategories({ signal }),
     placeholderData: keepPreviousData,
     staleTime: 24 * 60 * 60 * 1000, // 24h
   });
@@ -51,7 +51,7 @@ export const categoryQueryOptions = () => {
 export const bannersQueryOptions = () => {
   return queryOptions({
     queryKey: [QUERY_KEYS.BANNERS],
-    queryFn: getBanners,
+    queryFn: ({ signal }) => getBanners({ signal }),
     placeholderData: keepPreviousData,
     staleTime: 60 * 60 * 1000, // 60min
   });
