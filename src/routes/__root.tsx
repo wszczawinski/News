@@ -5,15 +5,16 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import type { QueryClient } from '@tanstack/react-query';
 
 import { Footer, Hero, MainContent, Navbar } from '@/components/layout';
-import { bannersQueryOptions } from '@/services/queries';
+import { bannersQueryOptions, categoryQueryOptions } from '@/services/queries';
 
 interface MyRouterContext {
   queryClient: QueryClient;
 }
 
 export const Route = createRootRouteWithContext<MyRouterContext>()({
-  loader: async ({ context: { queryClient } }) => {
-    await queryClient.ensureQueryData(bannersQueryOptions());
+  loader: ({ context: { queryClient } }) => {
+    void queryClient.ensureQueryData(bannersQueryOptions());
+    void queryClient.ensureQueryData(categoryQueryOptions());
   },
   component: () => {
     return (
@@ -24,8 +25,8 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
           <Outlet />
         </MainContent>
         <Footer />
-        <ReactQueryDevtools buttonPosition='top-right' />
-        <TanStackRouterDevtools position='bottom-right' />
+        {import.meta.env.DEV && <ReactQueryDevtools buttonPosition='top-right' />}
+        {import.meta.env.DEV && <TanStackRouterDevtools position='bottom-right' />}
       </React.Fragment>
     );
   },

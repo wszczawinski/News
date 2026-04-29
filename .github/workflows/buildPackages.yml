@@ -12,31 +12,17 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
+      - uses: voidzero-dev/setup-vp@v1
         with:
           node-version: '24'
+          cache: true
+          run-install: true
 
-      - name: Install pnpm
-        run: npm install -g pnpm
+      - run: vp check
 
-      - name: Install dependencies
-        run: pnpm install
-
-      - name: Type Check
-        run: pnpm tsc --noEmit
-
-      - name: Lint Check
-        run: pnpm lint:check
-
-      - name: Format Check
-        run: pnpm format:check
-
-      - name: Build Project (Vite)
-        run: pnpm build
+      - run: vp build
 
   security-check:
     name: 🔐 Security Check (Snyk)
@@ -44,22 +30,16 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
+      - uses: voidzero-dev/setup-vp@v1
         with:
           node-version: '24'
+          cache: true
+          run-install: true
 
       - name: Install Snyk CLI
         run: npm install -g snyk@latest
-
-      - name: Install pnpm
-        run: npm install -g pnpm
-
-      - name: Install dependencies
-        run: pnpm install
 
       - name: Authenticate with Snyk
         env:
@@ -67,7 +47,7 @@ jobs:
         run: snyk auth $SNYK_TOKEN
 
       - name: 📦 Snyk Dependency Scan (SCA)
-        run: snyk test --severity-threshold=medium
+        run: snyk test --severity-threshold=medium --all-projects
         continue-on-error: true
 
       - name: 🧠 Snyk Code Scan (SAST)

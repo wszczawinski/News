@@ -3,7 +3,7 @@ import { createFileRoute } from '@tanstack/react-router';
 import { useSuspenseQuery } from '@tanstack/react-query';
 
 import { NewsList } from '@/components/NewsList';
-import { categoryQueryOptions, postsQueryOptions } from '@/services/queries';
+import { postsQueryOptions } from '@/services/queries';
 import { Spinner } from '@/components/ui/spinner';
 import { QUERY_KEYS } from '@/services/api';
 
@@ -16,7 +16,6 @@ const Home = () => {
 export const Route = createFileRoute('/')({
   loader: async ({ context: { queryClient } }) => {
     const paginatedPosts = await queryClient.ensureQueryData(postsQueryOptions({ page: 1, category: null }));
-    await queryClient.ensureQueryData(categoryQueryOptions());
 
     for (const post of paginatedPosts.content) {
       queryClient.setQueryData([QUERY_KEYS.POST, post.id], post);

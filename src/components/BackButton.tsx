@@ -8,11 +8,11 @@ export const BackButton = ({ children }: { children?: ReactNode }) => {
   const router = useRouter();
   const canGoBack = useCanGoBack();
 
-  const handleGoBack = () => {
+  const handleGoBack = async () => {
     if (canGoBack) {
       router.history.back();
     } else {
-      router.navigate({ to: '/' });
+      await router.navigate({ to: '/' });
     }
   };
 

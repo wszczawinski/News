@@ -18,16 +18,16 @@ export const CategorySelect = () => {
 
   const selectCategories: Category[] = [{ id: 0, name: 'Wszystkie aktualności', slug: 'all', position: 0 }, ...categories];
 
-  const handleValueChange = (value: string) => {
+  const handleValueChange = async (value: string) => {
     if (value === 'all') {
-      navigate({ to: '/' });
+      await navigate({ to: '/' });
     } else {
-      navigate({ to: '/news', search: { page: 1, category: value } });
+      await navigate({ to: '/news', search: { page: 1, category: value } });
     }
   };
 
-  const handleClear = () => {
-    navigate({ to: '/' });
+  const handleClear = async () => {
+    await navigate({ to: '/' });
   };
 
   return (
@@ -39,7 +39,7 @@ export const CategorySelect = () => {
             {category !== 'all' && <span className='absolute top-1 right-1 size-2 rounded-full bg-sky-600' />}
           </SelectTrigger>
         ) : (
-          <SelectTrigger className='focus:ring-0 focus:ring-offset-0 w-[220px]'>
+          <SelectTrigger className='focus:ring-0 focus:ring-offset-0 w-[220px] bg-background/70'>
             <SelectValue placeholder='Wybierz kategorie' />
           </SelectTrigger>
         )}

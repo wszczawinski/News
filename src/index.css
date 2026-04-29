@@ -1,5 +1,5 @@
-@import "tailwindcss";
-@import "tw-animate-css";
+@import 'tailwindcss';
+@import 'tw-animate-css';
 
 @custom-variant dark (&:is(.dark *));
 
@@ -186,7 +186,7 @@
   overflow: hidden !important;
 }
 
-.iframe-wrapper [style*="padding-bottom"] {
+.iframe-wrapper [style*='padding-bottom'] {
   display: none !important;
 }
 

@@ -1,18 +1,24 @@
 # Build stage
-FROM node:22-alpine AS builder
+FROM node:24-alpine AS builder
 
 WORKDIR /app
 
-# Install pnpm
-RUN npm install -g pnpm
+RUN npm install -g pnpm@10.33.2
 
 # Copy package files
-COPY package.json pnpm-lock.yaml ./
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 
-# Install dependencies
-RUN pnpm install --frozen-lockfile
+# Install dependencies (ignore-scripts skips prepare/vp config which needs git)
+RUN pnpm install --frozen-lockfile --ignore-scripts
 
-# Copy source code and build
+# Build-time arguments — must be set in Dokploy "Build-time Arguments"
+ARG VITE_API_URL
+ARG VITE_MEDIA_URL
+ARG VITE_ANALYTICS_URL
+ARG VITE_ANALYTICS_WEBSITE_ID
+ARG VITE_SENTRY_DSN
+
+# Copy source code and build (pnpm run build runs tsc + vp build via package.json script)
 COPY . .
 RUN pnpm run build
 
@@ -30,9 +36,6 @@ COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 # Copy built app
 COPY --from=builder /app/dist /usr/share/nginx/html
-
-# Set proper permissions
-RUN chmod -R 755 /usr/share/nginx/html
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=10s --retries=3 \
