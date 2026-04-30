@@ -7,7 +7,7 @@ import { PosterDialog } from './PosterDialog';
 
 type SidebarPosterProps = {
   posters: Banner[];
-  title?: string;
+  title: string;
   delay?: number;
   hasDots?: boolean;
 };
@@ -33,7 +33,7 @@ export const PosterCarousel = ({ posters, title, delay = 3000, hasDots }: Sideba
         <CarouselContent>
           {posters.map((poster, index) => (
             <CarouselItem key={poster.id}>
-              <PosterDialog posters={posters} index={index}>
+              <PosterDialog posters={posters} index={index} title={title}>
                 <img className='rounded-md' src={`${mediaUrl}/banner/${poster.image}`} />
               </PosterDialog>
             </CarouselItem>

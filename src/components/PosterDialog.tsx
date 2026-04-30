@@ -2,11 +2,12 @@ import { useState, useEffect, type ReactNode } from 'react';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTrigger } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import type { Banner } from '@/types';
 
 type GalleryProps = {
   index: number;
+  title: string;
   posters: Banner[];
   children: ReactNode;
 };
@@ -17,7 +18,7 @@ const buildMediaUrl = ({ filename }: { filename: string }): string => {
   return `${mediaUrl}/banner/${filename}`;
 };
 
-export const PosterDialog = ({ index, posters, children }: GalleryProps) => {
+export const PosterDialog = ({ index, title, posters, children }: GalleryProps) => {
   const images = posters.map(file => ({
     id: file.id,
     url: buildMediaUrl({ filename: file.image }),
@@ -70,6 +71,7 @@ export const PosterDialog = ({ index, posters, children }: GalleryProps) => {
       </DialogTrigger>
       <DialogContent className='gap-0'>
         <DialogHeader>
+          <DialogTitle className='sr-only'>{title}</DialogTitle>
           <DialogDescription className='sr-only'>Posters</DialogDescription>
         </DialogHeader>
 

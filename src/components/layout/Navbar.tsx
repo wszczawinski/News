@@ -10,7 +10,7 @@ import gmina from '@/images/links/gmina.jpg';
 import { CategorySelect } from '@/components/CategorySelect.tsx';
 
 import { NavContent } from '../NavContent';
-import { Sheet, SheetContent, SheetTrigger } from '../ui/sheet';
+import { Sheet, SheetContent, SheetDescription, SheetTitle, SheetTrigger } from '../ui/sheet';
 import { Button } from '../ui/button';
 import { bannersQueryOptions } from '@/services/queries';
 import { useSuspenseQuery } from '@tanstack/react-query';
@@ -63,6 +63,8 @@ export const Navbar = () => {
               </SheetTrigger>
             </div>
             <SheetContent side='right'>
+              <SheetTitle className='sr-only'>Mobile navigation</SheetTitle>
+              <SheetDescription className='sr-only'>Mobile navigation links</SheetDescription>
               <nav className='grid gap-5 text-xl font-medium p-6 pr-12'>
                 <NavContent onClick={() => setOpen(false)} />
                 {links.map((item, index) => (
