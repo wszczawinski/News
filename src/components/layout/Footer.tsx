@@ -17,13 +17,6 @@ export const Footer = () => {
           >
             Kontakt
           </Link>
-          <Link
-            to={'/links'}
-            className='text-muted-foreground transition-colors hover:text-foreground'
-            activeProps={{ className: 'text-sky-600' }}
-          >
-            Linki
-          </Link>
         </div>
         <div className='flex gap-2 text-muted-foreground '>
           <Copyright size={20} /> 2006-{currentYear}

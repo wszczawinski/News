@@ -35,7 +35,7 @@ export const SinglePost = ({ post }: { post: Post }) => {
     <>
       <div className='space-y-3 sm:bg-card sm:shadow-sm sm:rounded-sm sm:border sm:p-4 sm:min-h-64'>
         <span className='flex flex-row justify-between'>
-          <h4 className='text-lg text-sky-600 font-semibold tracking-tight sm:text-xl'>{title}</h4>
+          <h4 className='text-lg text-sky-600 font-normal tracking-tight sm:text-xl'>{title}</h4>
           {isMobile && media && (
             <Button variant='outline' size='sm' onClick={handleShowGallery} className='cursor-pointer'>
               {showContent ? <Images /> : <TextInitial />}
