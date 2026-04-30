@@ -5,6 +5,7 @@ import { defineConfig } from 'vite-plus'
 import react from "@vitejs/plugin-react"
 import { tanstackRouter } from "@tanstack/router-plugin/vite"
 import checker from 'vite-plugin-checker'
+import { VitePWA } from 'vite-plugin-pwa'
 
 const __dirname = fileURLToPath(new URL('.', import.meta.url))
 
@@ -181,6 +182,13 @@ export default defineConfig({
     react(),
     tailwindcss(),
     checker({ typescript: { tsconfigPath: "./tsconfig.app.json" }, enableBuild: false }),
+    VitePWA({
+      registerType: 'autoUpdate',
+      manifest: false,
+      workbox: {
+        globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],
+      },
+    }),
   ],
   resolve: {
     alias: {
