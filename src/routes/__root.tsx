@@ -1,10 +1,11 @@
 import * as React from 'react';
 import { Outlet, createRootRouteWithContext } from '@tanstack/react-router';
-import { TanStackRouterDevtools } from '@tanstack/react-router-devtools';
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+// import { TanStackRouterDevtools } from '@tanstack/react-router-devtools';
+// import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import type { QueryClient } from '@tanstack/react-query';
 
 import { Footer, Hero, MainContent, Navbar } from '@/components/layout';
+import { PwaInstallBanner } from '@/components/PwaInstallBanner';
 import { bannersQueryOptions, categoryQueryOptions } from '@/services/queries';
 
 interface MyRouterContext {
@@ -25,8 +26,9 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
           <Outlet />
         </MainContent>
         <Footer />
-        {import.meta.env.DEV && <ReactQueryDevtools buttonPosition='top-right' />}
-        {import.meta.env.DEV && <TanStackRouterDevtools position='bottom-right' />}
+        <PwaInstallBanner />
+        {/* {import.meta.env.DEV && <ReactQueryDevtools buttonPosition='top-right' />} */}
+        {/* {import.meta.env.DEV && <TanStackRouterDevtools position='bottom-right' />} */}
       </React.Fragment>
     );
   },
