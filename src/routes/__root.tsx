@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { Outlet, createRootRouteWithContext } from '@tanstack/react-router';
+import { RootRouteError } from '@/components/RootRouteError';
 import { TanStackRouterDevtools } from '@tanstack/react-router-devtools';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import type { QueryClient } from '@tanstack/react-query';
@@ -16,6 +17,7 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
     void queryClient.ensureQueryData(bannersQueryOptions());
     void queryClient.ensureQueryData(categoryQueryOptions());
   },
+  errorComponent: RootRouteError,
   component: () => {
     return (
       <React.Fragment>
