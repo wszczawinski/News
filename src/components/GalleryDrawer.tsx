@@ -1,4 +1,4 @@
-import { useState, useMemo, useRef, type TouchEvent } from 'react';
+import { useState, useMemo, type MouseEvent } from 'react';
 import { ArrowLeft, ArrowRight, GalleryThumbnails } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
@@ -18,8 +18,6 @@ export const GalleryDrawer = ({ media, title, startIndex, children }: GalleryPro
     [media]
   );
 
-  const touchStartRef = useRef<{ x: number; y: number } | null>(null);
-
   const goToPrevious = () => {
     setCurrentIndex(prev => (prev === 0 ? images.length - 1 : prev - 1));
   };
@@ -36,29 +34,13 @@ export const GalleryDrawer = ({ media, title, startIndex, children }: GalleryPro
     }
   };
 
-  const handleTouchStart = (e: TouchEvent<HTMLDivElement>) => {
-    const touch = e.touches[0];
-    touchStartRef.current = { x: touch.clientX, y: touch.clientY };
-  };
-
-  const handleTouchEnd = (e: TouchEvent<HTMLDivElement>) => {
-    if (!touchStartRef.current) return;
-
-    const touch = e.changedTouches[0];
-    const deltaX = touch.clientX - touchStartRef.current.x;
-    const deltaY = touch.clientY - touchStartRef.current.y;
-    const minSwipeDistance = 40;
-
-    // Only treat primarily horizontal moves as gallery swipes.
-    if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > minSwipeDistance) {
-      if (deltaX > 0) {
-        goToPrevious();
-      } else {
-        goToNext();
-      }
+  const handleClick = (e: MouseEvent<HTMLDivElement>) => {
+    const { left, width } = e.currentTarget.getBoundingClientRect();
+    if (e.clientX - left < width / 2) {
+      goToPrevious();
+    } else {
+      goToNext();
     }
-
-    touchStartRef.current = null;
   };
 
   return (
@@ -79,11 +61,7 @@ export const GalleryDrawer = ({ media, title, startIndex, children }: GalleryPro
         </DrawerDescription>
 
         <div className='flex-1 min-h-0 px-2 pb-4 flex flex-col'>
-          <div
-            className='flex-1 min-h-0 w-full flex justify-center items-center overflow-hidden'
-            onTouchStart={handleTouchStart}
-            onTouchEnd={handleTouchEnd}
-          >
+          <div className='flex-1 min-h-0 w-full flex justify-center items-center overflow-hidden' onClick={handleClick}>
             <img
               src={images[currentIndex].url}
               alt={`Image ${currentIndex + 1}`}

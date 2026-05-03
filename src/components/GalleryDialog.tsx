@@ -2,9 +2,10 @@ import { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import { ArrowLeft, ArrowRight, GalleryThumbnails } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
+import { buttonVariants } from '@/components/ui/buttonVariants';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
-import { buildMediaUrl } from '@/lib/utils';
+import { cn, buildMediaUrl } from '@/lib/utils';
 
 import type { GalleryProps } from './Gallery';
 
@@ -109,7 +110,7 @@ export const GalleryDialog = ({ media, title, startIndex, children }: GalleryPro
 
         <div className='w-full'>
           <div
-            className='flex-1 min-w-0 flex justify-center items-center h-96 sm:h-[500px] md:h-[580px] relative'
+            className='flex-1 min-w-0 flex justify-center items-center h-96 sm:h-[500px] md:h-[580px] relative isolate'
             style={{ viewTransitionName: 'gallery-image' }}
           >
             <button
@@ -119,7 +120,12 @@ export const GalleryDialog = ({ media, title, startIndex, children }: GalleryPro
               className='group/left absolute inset-y-0 left-0 z-10 w-1/2 cursor-pointer'
               onClick={() => navigateBy(-1)}
             >
-              <span className='pointer-events-none absolute left-2 top-1/2 flex size-9 -translate-y-1/2 items-center justify-center rounded-md border bg-background/90 opacity-0 transition-opacity group-hover/left:opacity-100'>
+              <span
+                className={cn(
+                  buttonVariants({ variant: 'outline', size: 'icon' }),
+                  'pointer-events-none absolute left-2 top-1/2 -translate-y-1/2 opacity-0 transition-opacity group-hover/left:opacity-100'
+                )}
+              >
                 <ArrowLeft className='h-4 w-4' />
               </span>
             </button>
@@ -130,7 +136,12 @@ export const GalleryDialog = ({ media, title, startIndex, children }: GalleryPro
               className='group/right absolute inset-y-0 right-0 z-10 w-1/2 cursor-pointer'
               onClick={() => navigateBy(1)}
             >
-              <span className='pointer-events-none absolute right-2 top-1/2 flex size-9 -translate-y-1/2 items-center justify-center rounded-md border bg-background/90 opacity-0 transition-opacity group-hover/right:opacity-100'>
+              <span
+                className={cn(
+                  buttonVariants({ variant: 'outline', size: 'icon' }),
+                  'pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 opacity-0 transition-opacity group-hover/right:opacity-100'
+                )}
+              >
                 <ArrowRight className='h-4 w-4' />
               </span>
             </button>

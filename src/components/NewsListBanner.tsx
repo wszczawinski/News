@@ -7,7 +7,6 @@ import type { Banner } from '@/types';
 
 import { ProgressiveImage } from './ProgressiveImage';
 import { PosterCarousel } from './PosterCarousel';
-import { PosterAdd } from './PosterAdd';
 
 const mediaUrl = import.meta.env.VITE_MEDIA_URL;
 
@@ -19,13 +18,13 @@ type BannerPostersProps = {
 const BannerPosters = ({ ad, local }: BannerPostersProps) => {
   return (
     <div className='flex flex-row gap-3'>
-      {ad && <PosterAdd imageUrl={`${mediaUrl}/banner/${ad.image}`} name={ad.name} link={ad.link} />}
+      {ad && <PosterCarousel title='Reklama' posters={[ad]} delay={7000} hasDots={false} />}
 
       {!!local &&
         (local.length > 1 ? (
           <>
             <PosterCarousel title='Gmina' posters={[local[0]]} delay={7000} hasDots={false} />
-            <PosterCarousel title='Gmina' posters={[local[1]]} delay={7000} hasDots={false} />
+            <PosterCarousel title='Gmina' posters={local.slice(1)} delay={7000} hasDots={false} />
           </>
         ) : (
           <PosterCarousel title='Gmina' posters={local} delay={7000} hasDots={false} />
