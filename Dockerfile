@@ -17,6 +17,9 @@ ARG VITE_MEDIA_URL
 ARG VITE_ANALYTICS_URL
 ARG VITE_ANALYTICS_WEBSITE_ID
 ARG VITE_SENTRY_DSN
+ARG SENTRY_AUTH_TOKEN
+ARG SENTRY_ORG
+ARG SENTRY_PROJECT
 
 # Copy source code and build (pnpm run build runs tsc + vp build via package.json script)
 COPY . .
