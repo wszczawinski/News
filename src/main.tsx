@@ -7,17 +7,24 @@ import { RouterProvider, createRouter } from '@tanstack/react-router';
 import './index.css';
 
 import { routeTree } from './routeTree.gen';
+import { RootRouteError } from './components/RootRouteError';
 
 Sentry.init({
   dsn: import.meta.env.VITE_SENTRY_DSN,
+  environment: import.meta.env.MODE,
+  integrations: [Sentry.browserTracingIntegration(), Sentry.replayIntegration()],
+  tracesSampleRate: 0.2,
+  replaysSessionSampleRate: 0.1,
+  replaysOnErrorSampleRate: 1.0,
 });
 
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      retry: 3,
+      retry: 2,
       staleTime: 15 * 60 * 1000, // 15min
       gcTime: 24 * 60 * 60 * 1000, // 24h
+      throwOnError: true,
     },
   },
 });
@@ -41,8 +48,10 @@ declare module '@tanstack/react-router' {
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <RouterProvider router={router} context={{ queryClient }} />
-    </QueryClientProvider>
+    <Sentry.ErrorBoundary fallback={props => <RootRouteError error={props.error as Error} reset={() => props.resetError()} />}>
+      <QueryClientProvider client={queryClient}>
+        <RouterProvider router={router} context={{ queryClient }} />
+      </QueryClientProvider>
+    </Sentry.ErrorBoundary>
   </StrictMode>
 );

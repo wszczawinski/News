@@ -5,6 +5,7 @@ import { defineConfig } from 'vite-plus'
 import react from "@vitejs/plugin-react"
 import { tanstackRouter } from "@tanstack/router-plugin/vite"
 import checker from 'vite-plugin-checker'
+import { sentryVitePlugin } from "@sentry/vite-plugin"
 
 const __dirname = fileURLToPath(new URL('.', import.meta.url))
 
@@ -181,6 +182,12 @@ export default defineConfig({
     react(),
     tailwindcss(),
     checker({ typescript: { tsconfigPath: "./tsconfig.app.json" }, enableBuild: false }),
+    sentryVitePlugin({
+      telemetry: false,
+      sourcemaps: {
+        filesToDeleteAfterUpload: ['./**/*.map'],
+      },
+    }),
   ],
   resolve: {
     alias: {
@@ -188,6 +195,7 @@ export default defineConfig({
     },
   },
   build: {
+    sourcemap: 'hidden',
     rollupOptions: {
       output: {
         manualChunks: id => {
