@@ -34,7 +34,7 @@ export const Navbar = () => {
   ];
 
   return (
-    <div className='sticky top-0 z-50 w-full h-12 sm:h-14 px-4 md:px-6 border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60'>
+    <div className='sticky top-0 z-50 w-full h-12 sm:h-14 px-3 sm:px-4 md:px-6 border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60'>
       <div className='h-full flex items-center justify-between gap-4 w-full mx-auto max-w-screen-lg md:pl-[58px]'>
         <div className='sm:hidden'>
           <Link to='/'>
