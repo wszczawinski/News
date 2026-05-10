@@ -56,4 +56,4 @@ jobs:
 
       - name: 📡 Monitor for Future Issues
         if: github.ref == 'refs/heads/develop'
-        run: snyk monitor
+        run: snyk monitor --all-projects
