@@ -1,9 +1,9 @@
 # Build stage
-FROM node:24-alpine AS builder
+FROM node:26.13.0-alpine AS builder
 
 WORKDIR /app
 
-RUN npm install -g pnpm@10.33.2
+RUN npm install -g pnpm@12.18.0
 
 # Copy package files
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
@@ -27,7 +27,7 @@ RUN --mount=type=secret,id=SENTRY_AUTH_TOKEN,env=SENTRY_AUTH_TOKEN \
     pnpm run build
 
 # Production stage
-FROM nginx:1.28-alpine
+FROM nginx:1.31-alpine
 
 # Install wget for health check
 RUN apk add --no-cache wget
