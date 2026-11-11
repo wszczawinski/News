@@ -144,6 +144,14 @@ export default defineConfig({
           "es2020": true,
           "browser": true
         }
+      },
+      {
+        "files": [
+          "src/routes/**"
+        ],
+        "rules": {
+          "react/only-export-components": "off"
+        }
       }
     ],
     "options": {

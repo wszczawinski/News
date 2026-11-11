@@ -1,11 +1,11 @@
 import { Link } from '@tanstack/react-router';
 import { Copyright } from 'lucide-react';
 
-export const Footer = () => {
-  const currentYear = new Date().toLocaleDateString('pl-PL', {
-    year: 'numeric',
-  });
+const currentYear = new Date().toLocaleDateString('pl-PL', {
+  year: 'numeric',
+});
 
+export const Footer = () => {
   return (
     <div className='border-t border-border/40 px-4 md:px-6'>
       <footer className='text-sm flex flex-col md:flex-row justify-between items-center gap-6 py-4 w-full mx-auto max-w-screen-lg'>
