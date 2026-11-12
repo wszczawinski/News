@@ -32,7 +32,6 @@ README.md
 
 # Cache
 .cache/
-.eslintcache
 .tanstack/
 
 # Logs

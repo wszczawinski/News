@@ -13,7 +13,7 @@ export const CarouselWithThumbs = ({ images }: { images: string[] }) => {
       return;
     }
 
-    // eslint-disable-next-line
+    // oxlint-disable-next-line react/set-state-in-effect -- syncs initial state from the Embla API
     setCurrent(api.selectedScrollSnap() + 1);
     api.on('select', () => {
       setCurrent(api.selectedScrollSnap() + 1);

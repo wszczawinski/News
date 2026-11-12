@@ -1,13 +1,10 @@
 import path from "path"
-import { fileURLToPath } from "url"
 import tailwindcss from "@tailwindcss/vite"
 import { defineConfig } from 'vite-plus'
 import react from "@vitejs/plugin-react"
 import { tanstackRouter } from "@tanstack/router-plugin/vite"
 import checker from 'vite-plugin-checker'
 import { sentryVitePlugin } from "@sentry/vite-plugin"
-
-const __dirname = fileURLToPath(new URL('.', import.meta.url))
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -88,7 +85,15 @@ export default defineConfig({
           "no-unsafe-optional-chaining": "error",
           "no-unused-labels": "error",
           "no-unused-private-class-members": "error",
-          "no-unused-vars": "error",
+          "no-unused-vars": [
+            "error",
+            {
+              "vars": "all",
+              "varsIgnorePattern": "^_",
+              "args": "after-used",
+              "argsIgnorePattern": "^_"
+            }
+          ],
           "no-useless-assignment": "error",
           "no-useless-backreference": "error",
           "no-useless-catch": "error",
@@ -118,16 +123,6 @@ export default defineConfig({
           "typescript/prefer-namespace-keyword": "error",
           "typescript/triple-slash-reference": "error",
           "no-console": "error",
-          "unused-imports/no-unused-imports": "error",
-          "unused-imports/no-unused-vars": [
-            "warn",
-            {
-              "vars": "all",
-              "varsIgnorePattern": "^_",
-              "args": "after-used",
-              "argsIgnorePattern": "^_"
-            }
-          ],
           "react/rules-of-hooks": "error",
           "react/exhaustive-deps": "warn",
           "react/only-export-components": [
@@ -137,9 +132,6 @@ export default defineConfig({
             }
           ]
         },
-        "jsPlugins": [
-          "eslint-plugin-unused-imports"
-        ],
         "env": {
           "es2020": true,
           "browser": true
@@ -199,12 +191,12 @@ export default defineConfig({
   ],
   resolve: {
     alias: {
-      "@": path.resolve(__dirname, "./src"),
+      "@": path.resolve(import.meta.dirname, "./src"),
     },
   },
   build: {
     sourcemap: 'hidden',
-    rollupOptions: {
+    rolldownOptions: {
       output: {
         manualChunks: id => {
           if (id.includes('node_modules/react') || id.includes('node_modules/react-dom')) return 'vendor-react';
