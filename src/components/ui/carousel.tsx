@@ -96,6 +96,7 @@ const Carousel = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivEl
         return;
       }
 
+      // oxlint-disable-next-line react/set-state-in-effect -- syncs initial state from the Embla API
       onSelect(api);
       api.on('reInit', onSelect);
       api.on('select', onSelect);

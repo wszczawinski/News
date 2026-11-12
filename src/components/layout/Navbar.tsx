@@ -10,21 +10,31 @@ import gmina from '@/images/links/gmina.jpg';
 import { CategorySelect } from '@/components/CategorySelect.tsx';
 
 import { NavContent } from '../NavContent';
-import { Sheet, SheetContent, SheetTrigger } from '../ui/sheet';
+import { Sheet, SheetContent, SheetDescription, SheetTitle, SheetTrigger } from '../ui/sheet';
 import { Button } from '../ui/button';
+import { bannersQueryOptions } from '@/services/queries';
+import { useSuspenseQuery } from '@tanstack/react-query';
+import { PosterCarousel } from '../PosterCarousel';
 
 export const Navbar = () => {
   const [open, setOpen] = useState(false);
   const { pathname } = useLocation();
+  const { data: banners } = useSuspenseQuery(bannersQueryOptions());
+
+  const recommends = banners.filter(b => b.type === 7);
 
   const links = [
     { link: 'http://lipy.e-lubawa.pl/', src: sanktuarium, alt: 'Sanktuarium' },
     { link: 'http://gminalubawa.pl/', src: gmina, alt: 'Gmina' },
-    { link: 'http://www.dekanat.gminalubawa.pl/', src: dziekanat, alt: 'Dziekanat' },
+    {
+      link: 'http://www.dekanat.gminalubawa.pl/',
+      src: dziekanat,
+      alt: 'Dziekanat',
+    },
   ];
 
   return (
-    <div className='sticky top-0 z-50 w-full h-12 sm:h-14 px-4 md:px-6 border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60'>
+    <div className='sticky top-0 z-50 w-full h-12 sm:h-14 px-3 sm:px-4 md:px-6 border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60'>
       <div className='h-full flex items-center justify-between gap-4 w-full mx-auto max-w-screen-lg md:pl-[58px]'>
         <div className='sm:hidden'>
           <Link to='/'>
@@ -37,7 +47,7 @@ export const Navbar = () => {
             <img width={136} height={28} src={logo_desktop} alt='e-Lubawa logo' />
           </Link>
         </div>
-        <div className='flex flex-row gap-4 items-center justify-between'>
+        <div className='flex flex-row gap-6 items-center justify-between'>
           {(pathname === '/' || pathname.includes('news')) && <CategorySelect />}
           <nav className='hidden sm:flex font-medium flex-row items-center justify-end gap-5 lg:gap-8'>
             <NavContent onClick={() => setOpen(false)} />
@@ -53,8 +63,9 @@ export const Navbar = () => {
               </SheetTrigger>
             </div>
             <SheetContent side='right'>
+              <SheetTitle className='sr-only'>Mobile navigation</SheetTitle>
+              <SheetDescription className='sr-only'>Mobile navigation links</SheetDescription>
               <nav className='grid gap-5 text-xl font-medium p-6 pr-12'>
-                {/*<img width={169} height={29} src={logo} alt='e-Lubawa logo' />*/}
                 <NavContent onClick={() => setOpen(false)} />
                 {links.map((item, index) => (
                   <a
@@ -67,6 +78,11 @@ export const Navbar = () => {
                     <img src={item.src} alt={item.alt} className='absolute inset-0 w-full h-[200%] object-cover -translate-y-1/2' />
                   </a>
                 ))}
+                {!!recommends.length && (
+                  <div className='w-full max-w-40'>
+                    <PosterCarousel title='Zapraszamy' posters={recommends} delay={5000} hasDots={false} />
+                  </div>
+                )}
               </nav>
             </SheetContent>
           </Sheet>

@@ -11,18 +11,17 @@
 import { createFileRoute } from '@tanstack/react-router'
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as NewsRouteImport } from './routes/news'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as NewsRouteImport } from './routes/news'
 import { Route as PostPostIdSlugRouteImport } from './routes/post.$postId.$slug'
 
-const LinksLazyRouteImport = createFileRoute('/links')()
 const ContactLazyRouteImport = createFileRoute('/contact')()
 
-const LinksLazyRoute = LinksLazyRouteImport.update({
-  id: '/links',
-  path: '/links',
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
   getParentRoute: () => rootRouteImport,
-} as any).lazy(() => import('./routes/links.lazy').then((d) => d.Route))
+} as any)
 const ContactLazyRoute = ContactLazyRouteImport.update({
   id: '/contact',
   path: '/contact',
@@ -31,11 +30,6 @@ const ContactLazyRoute = ContactLazyRouteImport.update({
 const NewsRoute = NewsRouteImport.update({
   id: '/news',
   path: '/news',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PostPostIdSlugRoute = PostPostIdSlugRouteImport.update({
@@ -48,14 +42,12 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/news': typeof NewsRoute
   '/contact': typeof ContactLazyRoute
-  '/links': typeof LinksLazyRoute
   '/post/$postId/$slug': typeof PostPostIdSlugRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/news': typeof NewsRoute
   '/contact': typeof ContactLazyRoute
-  '/links': typeof LinksLazyRoute
   '/post/$postId/$slug': typeof PostPostIdSlugRoute
 }
 export interface FileRoutesById {
@@ -63,32 +55,30 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/news': typeof NewsRoute
   '/contact': typeof ContactLazyRoute
-  '/links': typeof LinksLazyRoute
   '/post/$postId/$slug': typeof PostPostIdSlugRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/news' | '/contact' | '/links' | '/post/$postId/$slug'
+  fullPaths: '/' | '/news' | '/contact' | '/post/$postId/$slug'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/news' | '/contact' | '/links' | '/post/$postId/$slug'
-  id: '__root__' | '/' | '/news' | '/contact' | '/links' | '/post/$postId/$slug'
+  to: '/' | '/news' | '/contact' | '/post/$postId/$slug'
+  id: '__root__' | '/' | '/news' | '/contact' | '/post/$postId/$slug'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   NewsRoute: typeof NewsRoute
   ContactLazyRoute: typeof ContactLazyRoute
-  LinksLazyRoute: typeof LinksLazyRoute
   PostPostIdSlugRoute: typeof PostPostIdSlugRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/links': {
-      id: '/links'
-      path: '/links'
-      fullPath: '/links'
-      preLoaderRoute: typeof LinksLazyRouteImport
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/contact': {
@@ -105,13 +95,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof NewsRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/post/$postId/$slug': {
       id: '/post/$postId/$slug'
       path: '/post/$postId/$slug'
@@ -126,7 +109,6 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   NewsRoute: NewsRoute,
   ContactLazyRoute: ContactLazyRoute,
-  LinksLazyRoute: LinksLazyRoute,
   PostPostIdSlugRoute: PostPostIdSlugRoute,
 }
 export const routeTree = rootRouteImport

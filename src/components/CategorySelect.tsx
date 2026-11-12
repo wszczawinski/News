@@ -18,28 +18,28 @@ export const CategorySelect = () => {
 
   const selectCategories: Category[] = [{ id: 0, name: 'Wszystkie aktualności', slug: 'all', position: 0 }, ...categories];
 
-  const handleValueChange = (value: string) => {
+  const handleValueChange = async (value: string) => {
     if (value === 'all') {
-      navigate({ to: '/' });
+      await navigate({ to: '/' });
     } else {
-      navigate({ to: '/news', search: { page: 1, category: value } });
+      await navigate({ to: '/news', search: { page: 1, category: value } });
     }
   };
 
-  const handleClear = () => {
-    navigate({ to: '/' });
+  const handleClear = async () => {
+    await navigate({ to: '/' });
   };
 
   return (
     <div className='flex flex-row sm:flex-row-reverse gap-2 w-full sm:w-auto sm:pr-1 sm:pt-1'>
       <Select value={category} onValueChange={handleValueChange}>
         {isMobile ? (
-          <SelectTrigger size='sm' hideChevron className='relative size-9 p-0 justify-center focus:ring-0 focus:ring-offset-0'>
+          <SelectTrigger size='sm' hideChevron className='relative size-9 p-0 justify-center bg-white focus:ring-0 focus:ring-offset-0'>
             <ListFilter size={16} className='text-sky-600' />
             {category !== 'all' && <span className='absolute top-1 right-1 size-2 rounded-full bg-sky-600' />}
           </SelectTrigger>
         ) : (
-          <SelectTrigger className='focus:ring-0 focus:ring-offset-0 w-[220px]'>
+          <SelectTrigger className='focus:ring-0 focus:ring-offset-0 w-[220px] bg-background/80'>
             <SelectValue placeholder='Wybierz kategorie' />
           </SelectTrigger>
         )}
@@ -52,7 +52,7 @@ export const CategorySelect = () => {
         </SelectContent>
       </Select>
       {!isMobile && category !== 'all' && (
-        <Button onClick={handleClear} className='animate-fade-in bg-transparent' size={'default'} variant={'outline'}>
+        <Button onClick={handleClear} className='animate-fade-in bg-background/80' size={'default'} variant={'outline'}>
           <FilterX size={16} />
         </Button>
       )}

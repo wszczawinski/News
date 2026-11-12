@@ -1,4 +1,4 @@
-import { createFileRoute, useRouter } from '@tanstack/react-router';
+import { createFileRoute, Navigate } from '@tanstack/react-router';
 import { useSuspenseQuery } from '@tanstack/react-query';
 
 import { postQueryOptions } from '@/services/queries';
@@ -11,11 +11,7 @@ const PostComponent = () => {
   return <SinglePost post={post} />;
 };
 
-const PostErrorComponent = () => {
-  const router = useRouter();
-
-  router.navigate({ to: '/' });
-};
+const PostErrorComponent = () => <Navigate to='/' />;
 
 export const Route = createFileRoute('/post/$postId/$slug')({
   params: {

@@ -2,92 +2,97 @@
 
 A modern, responsive news platform built with React, TypeScript, and cutting-edge technologies for optimal performance and user experience.
 
-## 🚀 Features
+## Features
 
-- **Type-safe Routing**: Implemented with TanStack Router for robust navigation
-- **Efficient Data Management**: TanStack Query for client-side state management and caching
-- **Modern UI Components**: Built with Shadcn/ui - Radix UI primitives and styled with Tailwind CSS
-- **Responsive Design**: Mobile-first approach with beautiful animations
+- **Type-safe Routing**: File-based routing with TanStack Router and auto code splitting
+- **Efficient Data Management**: TanStack Query with persistence for client-side caching
+- **Modern UI Components**: Shadcn/ui built on Radix UI primitives, styled with Tailwind CSS v4
+- **Responsive Design**: Mobile-first approach with smooth animations
 - **Progressive Images**: Optimized image loading for better performance
 - **Category Filtering**: Dynamic news categorization and filtering
-- **Pagination**: Efficient content pagination for better UX
-- **Gallery Support**: Interactive image galleries with carousel functionality
-- **SEO Optimized**: Proper meta tags and structured data
+- **Pagination**: Efficient content pagination
+- **Gallery Support**: Interactive image galleries with Embla Carousel
+- **Error Tracking**: Sentry integration for production monitoring
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 ### Frontend
-- **React 19.1.1** - Modern React with latest features
-- **TypeScript 5.9.2** - Type-safe development
-- **TanStack Router** - File-based routing with type safety
-- **TanStack Query** - Server state management
-- **Tailwind CSS 4.1.12** - Utility-first CSS framework
-- **Shadcn/ui** - UI components
-- **Embla Carousel** - Touch-friendly carousels
-- **Lucide React** - Beautiful icons
-- **Zod** - Schema validation
+
+- **React 19** - Modern React with latest features
+- **TypeScript 6** - Type-safe development
+- **TanStack Router** - File-based routing with type safety and auto code splitting
+- **TanStack Query** - Server state management with local storage persistence
+- **Tailwind CSS 4** - Utility-first CSS framework
+- **Shadcn/ui** - UI component library (Radix UI + Tailwind)
+- **Embla Carousel** - Touch-friendly carousels with autoplay
+- **Lucide React** - Icon library
+- **Vaul** - Drawer component
+- **Sentry** - Error tracking and monitoring
 
 ### Build Tools
-- **Vite** - Fast build tool and development server
-- **ESLint** - Code linting
-- **Prettier** - Code formatting
+
+- **Vite+** (`vp`) - Unified toolchain wrapping Vite, Oxlint, Oxfmt, and Vitest
 - **TypeScript ESLint** - TypeScript-specific linting rules
 
 ### Deployment
+
 - **Docker** - Containerization
 - **Nginx** - Web server and reverse proxy
 - **Self-hosted VPS** - Custom deployment infrastructure
 
-## 📦 Installation
+## Installation
 
-1. Install dependencies using pnpm:
+1. Install dependencies:
 
 ```bash
-pnpm install
+vp install
 ```
 
-2. Create environment file, then fill values:
+2. Create environment file, then fill in values:
 
 ```bash
 cp .env.example .env
 ```
 
 3. Start the development server:
+
 ```bash
-pnpm run dev
+vp dev
 ```
 
-## 🔗 Backend Integration
+## Available Commands
 
-This frontend connects to a Spring Boot backend API (maintained in private repositories) that provides:
+```bash
+vp dev          # Start development server
+vp build        # Type-check and build for production
+vp preview      # Preview production build
+vp check        # Run format, lint, and type checks
+vp lint         # Lint source files
+vp fmt          # Format source files
+vp test         # Run tests
+```
+
+## Backend Integration
+
+This frontend connects to a Spring Boot backend API (maintained in a private repository) that provides:
+
 - News articles and content management
 - Category management
 - Image upload and processing
 - Admin panel functionality
 
-## 🌐 Production Deployment
+## Production Deployment
 
 The application is deployed using:
+
 - **Docker containers** for consistent environments
 - **Nginx** as reverse proxy and static file server
 - **Self-hosted VPS** for full control over infrastructure
 
-## 📱 Features Overview
+## Routes
 
-### News Management
-- Browse latest news articles
-- Filter by categories
-- Paginated content loading
-- Individual post pages with full content
-
-### User Experience
-- Progressive image loading
-- Responsive carousel galleries
-- Smooth animations and transitions
-- Mobile-optimized interface
-
-### Performance Optimizations
-- Client-side caching with TanStack Query
-- Code splitting with lazy routes
-- Optimized bundle sizes
-- Progressive image loading
+- `/` — Home / latest news
+- `/news` — News listing with category filtering and pagination
+- `/post/:postId/:slug` — Individual post page
+- `/contact` — Contact page
+- `/links` — Links page

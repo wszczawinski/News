@@ -1,6 +1,8 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { useSuspenseQuery } from '@tanstack/react-query';
 
+import { RouteError } from '@/components/RouteError';
+
 import { categoryQueryOptions, postsQueryOptions } from '@/services/queries';
 import { NewsList } from '@/components/NewsList';
 import { Spinner } from '@/components/ui/spinner';
@@ -57,6 +59,6 @@ export const Route = createFileRoute('/news')({
       <Spinner size={'large'} />
     </div>
   ),
-  errorComponent: () => <div className='h-80 flex flex-col items-center justify-center'>Error occured</div>,
+  errorComponent: RouteError,
   component: PostsPage,
 });
